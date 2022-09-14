@@ -4,12 +4,19 @@ import './App.css';
 import { ApiHandler } from './util/api';
 
 function App() {
-  // test token = glpat-9o4Fc7dKM59j-w5anp3S
-  const apiHandler = new ApiHandler("glpat-9o4Fc7dKM59j-w5anp3S", "17389");
+  // test token = glpat-B9TXUoQw83CPzkAxQuNF
+  const apiHandler = new ApiHandler("glpat-B9TXUoQw83CPzkAxQuNF", "gitlab-visualizer");
 
   useEffect(() => {
-    apiHandler.getCommits().then(a => console.log(a))
-  }, [])
+
+    const init = async () => {
+      await apiHandler.init();
+      apiHandler.getCommits().then(d => console.log(d))
+    };
+
+    init();
+
+  })
 
   return (
     <div className="App">
