@@ -16,7 +16,7 @@ function wrapPromise<T>(axios: AxiosPromise<T>) {
 
 export class ApiHandler {
     private readonly handler: AxiosInstance;
-    private id: number = -1;
+    private id = -1;
     private projectName: string;
 
     constructor(token: string, projectName: string) {
