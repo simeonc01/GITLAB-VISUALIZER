@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import { Branch, Commit, Issue } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
         axios
             .then((d) => resolve(d.data))
         .catch(async (error) => {
@@ -36,7 +37,7 @@ export class ApiHandler {
 
     public async init() {
         return new Promise<void>((resolve, _) => {
-            wrapPromise(this.handler.get("/projects")).then((d) => {
+            wrapPromise(this.handler.get("/projects?per_page=100")).then((d) => {
                 const project = (d as []).find(e => (e as unknown as any).name === this.projectName);
                 this.id = (project as unknown as any).id;
                 resolve();
@@ -50,11 +51,23 @@ export class ApiHandler {
         this.projectName = projectName;
     }
 
-    public async getCommits(): Promise<any> {
-        return wrapPromise(
-            this.handler.get(`/projects/${this.id}/repository/commits`, {
+    public async getCommits(): Promise<Commit[]> {
+        return wrapPromise<Commit[]>(
+            this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
                 validateStatus: (code: number) => code === 200
             })
+        );
+    }
+
+    public async getIssues(): Promise<Issue[]> {
+        return wrapPromise<Issue[]>(
+            this.handler.get(`/projects/${this.id}/issues?per_page=100`)
+        );
+    }
+
+    public async getBranches(): Promise<Branch[]> {
+        return wrapPromise<Branch[]>(
+            this.handler.get(`/projects/${this.id}/repository/branches?per_page=100`)
         );
     }
 }

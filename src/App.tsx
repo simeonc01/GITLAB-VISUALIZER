@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
+import GitlabProvider from './components/GitlabProvider';
 import { ApiHandler } from './util/api';
 
 function App() {
@@ -10,7 +11,6 @@ function App() {
 
     const init = async () => {
       await apiHandler.init();
-      apiHandler.getCommits().then(d => console.log(d))
     };
 
     init();
@@ -18,9 +18,11 @@ function App() {
   })
 
   return (
-    <div>
-      <h1>Hello world</h1>
-    </div>
+    <GitlabProvider>
+      <div>
+        <h1>Hello world</h1>
+      </div>
+    </GitlabProvider>
   );
 }
 
