@@ -1,28 +1,69 @@
-import React, { createContext, ReactNode, useState } from 'react';
-import { Branch, Commit, IContextDefault, Issue } from '../util/types';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { ApiHandler } from '../util/api';
+import { Branch, Commit, GitlabError, IContextDefault, Issue } from '../util/types';
 
 
-const GtilabContext = createContext<IContextDefault>({
-    commits: [],
-    branches: [],
-    issues: [],
-    update: () => { return; }
-} as IContextDefault);
+const GtilabContext = createContext<IContextDefault>({} as IContextDefault);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
     const [commits, setCommits] = useState<Commit[]>([]);
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
+    const [error, setError] = useState<boolean>(false);
+
+    const apiHandler = new ApiHandler("", "");
+
+    const getCommits = (): Commit[] | null => {
+        if (error) return null;
+        return commits;
+    }
+
+    const getBranches = (): Branch[] | null => {
+        if (error) return null;
+        return branches;
+    }
+
+    useEffect(() => {
+        const init = async () => {
+            const token = localStorage.getItem("token");
+            const projectName = localStorage.getItem("projectName");
     
-    // TODO: Change update to only need to called to update local data
-    const update = (commits: Commit[], branches: Branch[], issues: Issue[]) => {
-        setCommits(commits);
-        setBranches(branches);
-        setIssues(issues);
+            if (token === null || projectName === null) {
+                setError(true);
+            } else {
+                const success = await apiHandler.updateDetails(token, projectName);
+                if (success) {
+                    // apiHandler.init().catch(error => {
+                    //     console.error("Error initing the context");
+                    //     console.error(error);
+                    //     setError(true);
+                    // });
+                    apiHandler.getCommits().then(d => console.log(d));
+    
+                }
+            }
+        }
+
+        init();
+
+    }, []);
+
+    const update = async () => {
+        if (!error)
+            apiHandler.update().then(data => {
+                setCommits(data.commits);
+                setBranches(data.branches);
+                setIssues(data.issues);
+            }).catch((error: GitlabError) => {
+                console.error("Error updating context data");
+                console.error(error.message);
+            });
+        else
+            console.error("Context is not setup correctly, need a valid Token and projectName")
     }
 
     return (
-        <GtilabContext.Provider value={{commits, branches, issues, update}}>
+        <GtilabContext.Provider value={{commits: getCommits(), branches: getBranches(), issues, error, update}}>
             {props.children}
         </GtilabContext.Provider>
     )
