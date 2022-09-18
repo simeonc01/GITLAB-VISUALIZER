@@ -46,31 +46,6 @@ export class ApiHandler {
         })
     }
 
-    // public async init(): Promise<void> {
-    //     // eslint-disable-next-line no-async-promise-executor
-    //     return new Promise<void>(async (resolve, reject) => {
-    //         const projects = await this.getProjects();
-    //         console.log(projects);
-
-    //         // const project = d.find(e => e.name === this.projectName);
-    //         // if (project) {
-    //         //     this.id = project.id;
-    //         //     resolve();
-    //         // }
-
-    //         // if (!project) 
-    //         //     reject({
-    //         //         message: "Project was not found",
-    //         //         data: null
-    //         //     });
-
-    //         // reject({
-    //         //     message: "Unknown error",
-    //         //     data: null
-    //         // })
-    //     })
-    // }
-
     public async update(): Promise<UpdateData> {
         return new Promise<UpdateData>((resolve, reject) => {
             Promise.all([

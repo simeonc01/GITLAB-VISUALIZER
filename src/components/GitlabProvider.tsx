@@ -57,6 +57,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             }).catch((error: GitlabError) => {
                 console.error("Error updating context data");
                 console.error(error.message);
+                setError(true);
             });
         else
             console.error("Context is not setup correctly, need a valid Token and projectName")
