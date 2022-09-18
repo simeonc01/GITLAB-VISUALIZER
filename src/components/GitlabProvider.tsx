@@ -27,19 +27,22 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         const init = async () => {
             const token = localStorage.getItem("token");
             const projectName = localStorage.getItem("projectName");
-    
+
             if (token === null || projectName === null) {
                 setError(true);
             } else {
                 const success = await apiHandler.updateDetails(token, projectName);
                 if (success) {
-                    // apiHandler.init().catch(error => {
-                    //     console.error("Error initing the context");
-                    //     console.error(error);
-                    //     setError(true);
-                    // });
-                    apiHandler.getCommits().then(d => console.log(d));
-    
+                    apiHandler.update().then(data => {
+                        console.log(data);
+                        setCommits(data.commits);
+                        setBranches(data.branches);
+                        setIssues(data.issues);
+                    }).catch((err: GitlabError) => {
+                        setError(true);
+                        console.error("Error in update");
+                        console.error(err.message);
+                    })
                 }
             }
         }
