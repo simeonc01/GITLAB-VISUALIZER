@@ -40,17 +40,18 @@ export class ApiHandler {
     }
 
     public async update(): Promise<UpdateData> {
-        console.log(this.handler.defaults.headers.common["PRIVATE-TOKEN"]);
         return new Promise<UpdateData>((resolve, reject) => {
             Promise.all([
                 this.getCommits(),
                 this.getBranches(),
-                this.getIssues()
+                this.getIssues(),
+                this.getCurrentProject()
             ]).then(data => {
                 resolve({
                     commits: data[0],
                     branches: data[1],
-                    issues: data[2]
+                    issues: data[2],
+                    currentProject: data[3]
                 });
             }).catch(error => {
                 reject({

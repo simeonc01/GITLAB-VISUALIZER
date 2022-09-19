@@ -188,7 +188,9 @@ export interface IContextDefault {
     commits: Commit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
+    currentProject: Project | null;
     error: boolean;
+    loading: boolean;
     update: () => void;
 }
 
@@ -196,6 +198,7 @@ export type UpdateData = {
     commits: Commit[];
     branches: Branch[];
     issues: Issue[];
+    currentProject: Project;
 }
 
 export type GitlabError = {
