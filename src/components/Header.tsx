@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TextField from "@mui/material/TextField";
-import { GitlabContext } from './GitlabProvider';
+import { GitLabContext } from './GitlabProvider';
 
 interface Props {
   window?: () => Window;
@@ -49,7 +49,7 @@ export default function Header(props: Props) {
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
 
-  const context = useContext(GitlabContext);
+  const context = useContext(GitLabContext);
 
   /**
    * Do a check if there is a project in the local storage.
