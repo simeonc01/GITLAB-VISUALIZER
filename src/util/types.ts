@@ -202,3 +202,9 @@ export type GitlabError = {
     message: string;
     data: object | null;
 }
+
+// recharts types
+export type LineType = {
+    dataKey: string;
+    stroke?: string;
+}
