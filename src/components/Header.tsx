@@ -200,8 +200,8 @@ export default function Header(props: Props) {
                   Legg til prosjekt
                 </Button> 
                 :
-                <Button onClick={click}  sx={{ color: '#fff' }}> //må oppdateres under
-                  Prosjekt Navn
+                <Button onClick={click}  sx={{ color: '#fff' }}> 
+                {context.currentProject !== null ? context.currentProject.name : "error"}
                 </Button>
                 }
               </div>
