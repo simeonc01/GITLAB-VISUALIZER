@@ -5,6 +5,8 @@ import { ApiHandler } from './util/api';
 import Header from './components/Header'
 import GraphExample from './components/GraphExample';
 import CommitComponent from './components/CommitComponent';
+import CollapsibleTable from './components/CommitComponentTest';
+
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF

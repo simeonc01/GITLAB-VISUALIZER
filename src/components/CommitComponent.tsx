@@ -61,9 +61,8 @@ export default function CommitComponent() {
     createData('Gingerbread', 356,  3.9, 1.5),
   ];
   */
-
-  const rows = commits.map((commit) => {
-    createData(commit.author_name, commit.title, 3.0, 3.3);
+  const rows: ReturnType<typeof createData>[] = commits.map((commit) => {
+    return createData(commit.author_name, commit.title, 3.0, 3.3);
   });
 
   function Row(props: { row: ReturnType<typeof createData> }) {
@@ -143,7 +142,7 @@ export default function CommitComponent() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.author_name} row={row} />
+              <Row key={row.name} row={row} />
             ))}
           </TableBody>
         </Table>
