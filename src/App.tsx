@@ -4,6 +4,7 @@ import GitlabProvider from './components/GitlabProvider';
 import { ApiHandler } from './util/api';
 import Header from './components/Header'
 import GraphExample from './components/GraphExample';
+import CommitComponent from './components/CommitComponent';
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF
@@ -70,6 +71,7 @@ function App() {
       <div>
         <h1>Hello world</h1>
       </div>
+      <CommitComponent />
     </GitlabProvider>
   );
 }
