@@ -17,7 +17,6 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
-  //const [authors, setAuthors] = useState<Author[]>([]);
 
   const context = useContext(GitLabContext);
 
@@ -31,7 +30,6 @@ function IssuesComponent() {
     assignee: string,
     created: Date,
     closed: Date | null,
-    price: number,
     description: string
   ) {
     return {
@@ -39,7 +37,6 @@ function IssuesComponent() {
       assignee,
       created,
       closed,
-      price,
       description,
     };
   }
@@ -47,10 +44,9 @@ function IssuesComponent() {
   const rows: ReturnType<typeof createData>[] = issues.map((issue) => {
     return createData(
       issue.title,
-      "Navn",
+      "User",
       issue.created_at,
       issue.closed_at,
-      3.3,
       issue.description
     );
   });
