@@ -26,29 +26,12 @@ export default function CommitComponent() {
     console.log(commits);
   }, [context.commits]);
 
-  function createData(
-    name: string,
-    calories: string,
-    fat: number,
-    price: number
-  ) {
+  function createData(title: string, author: string, commited_date: string, message: string) {
     return {
-      name,
-      calories,
-      fat,
-      price,
-      history: [
-        {
-          date: "2020-01-05",
-          customerId: "11091700",
-          amount: 3,
-        },
-        {
-          date: "2020-01-02",
-          customerId: "Anonymous",
-          amount: 1,
-        },
-      ],
+      title: title,
+      author: author,
+      commited_date: commited_date,
+      message: message,
     };
   }
 
@@ -62,7 +45,9 @@ export default function CommitComponent() {
   ];
   */
   const rows: ReturnType<typeof createData>[] = commits.map((commit) => {
-    return createData(commit.author_name, commit.title, 3.0, 3.3);
+      const date = new Date(commit.comitted_date)
+      console.log(date)
+    return createData(commit.title, commit.author_name, "dato", commit.message);
   });
 
   function Row(props: { row: ReturnType<typeof createData> }) {
@@ -82,43 +67,19 @@ export default function CommitComponent() {
             </IconButton>
           </TableCell>
           <TableCell component="th" scope="row">
-            {row.name}
+            {row.title}
           </TableCell>
-          <TableCell>{row.calories}</TableCell>
-          <TableCell align="right">{row.fat}</TableCell>
+          <TableCell>{row.author}</TableCell>
+          <TableCell align="right">{row.commited_date}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  History
+                <Typography variant="body2" gutterBottom component="div">
+                  Message: {row.message}
+                  Author email:
                 </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Customer</TableCell>
-                      <TableCell align="right">Amount</TableCell>
-                      <TableCell align="right">Total price ($)</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {row.history.map((historyRow) => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component="th" scope="row">
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell>{historyRow.customerId}</TableCell>
-                        <TableCell align="right">{historyRow.amount}</TableCell>
-                        <TableCell align="right">
-                          {Math.round(historyRow.amount * row.price * 100) /
-                            100}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
               </Box>
             </Collapse>
           </TableCell>
@@ -135,14 +96,14 @@ export default function CommitComponent() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Commit</TableCell>
+              <TableCell>Title</TableCell>
               <TableCell>Author</TableCell>
               <TableCell align="right">Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.name} row={row} />
+              <Row key={row.title} row={row} />
             ))}
           </TableBody>
         </Table>
