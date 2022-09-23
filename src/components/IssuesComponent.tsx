@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Issue } from "../util/types";
+import { Issue, Author } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -14,23 +14,23 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Description } from "@mui/icons-material";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
+  //const [authors, setAuthors] = useState<Author[]>([]);
 
   const context = useContext(GitLabContext);
 
   useEffect(() => {
     const tempIssues = context.issues;
     if (tempIssues !== null) setIssues(tempIssues);
-    console.log(issues);
   }, [context.issues]);
 
   function createData(
     title: string,
     assignee: string,
     created: Date,
+    closed: Date | null,
     price: number,
     description: string
   ) {
@@ -38,20 +38,9 @@ function IssuesComponent() {
       title,
       assignee,
       created,
+      closed,
       price,
       description,
-      history: [
-        {
-          description: "2020-01-02",
-          customerId: "11091700",
-          amount: 3,
-        },
-        {
-          date: "2020-01-02",
-          customerId: "Anonymous",
-          amount: 1,
-        },
-      ],
     };
   }
 
@@ -60,6 +49,7 @@ function IssuesComponent() {
       issue.title,
       "Navn",
       issue.created_at,
+      issue.closed_at,
       3.3,
       issue.description
     );
@@ -85,7 +75,10 @@ function IssuesComponent() {
             {row.title}
           </TableCell>
           <TableCell>{row.assignee}</TableCell>
-          <TableCell align="right">{row.created.toString()}</TableCell>
+          <TableCell>{row.created.toString()}</TableCell>
+          <TableCell align="right">
+            {row.closed !== null ? row.closed.toString() : "Still open"}
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -119,7 +112,8 @@ function IssuesComponent() {
               <TableCell />
               <TableCell>Issue</TableCell>
               <TableCell>Author</TableCell>
-              <TableCell align="right">Date</TableCell>
+              <TableCell>Date created</TableCell>
+              <TableCell align="right">Date closed</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
