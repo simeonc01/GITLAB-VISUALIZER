@@ -84,7 +84,10 @@ function App() {
         <h1>Filtreringskomponent</h1>
         <div className="bottomRow">
           <div className="commitComponent">
-            <Paper>
+            <Paper
+              elevation={20}
+              sx={{ width: "100%", overflow: "hidden"}}
+            >
               <CommitComponent />
             </Paper>
           </div>

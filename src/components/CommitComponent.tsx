@@ -91,8 +91,8 @@ export default function CommitComponent() {
   return (
     <div>
       <h1>Commit Component</h1>
-      <TableContainer component={Paper}>
-        <Table aria-label="Commits-table">
+      <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
+        <Table stickyHeader aria-label="Commits-table">
           <TableHead>
             <TableRow>
               <TableCell />
