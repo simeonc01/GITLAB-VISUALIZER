@@ -8,11 +8,7 @@ afterEach(() => {
   cleanup();
 });
 
-test("Should render Issues component", () => {
-  //render(<IssuesComponent />);
-  expect(true).toBe(true);
-});
-
+//jest --updateSnapshot Når snapshoten endrer seg
 test("Matches snapshot", () => {
   const tree = renderer.create(<IssuesComponent />).toJSON();
   expect(tree).toMatchSnapshot();
