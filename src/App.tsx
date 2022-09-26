@@ -67,7 +67,7 @@ function App() {
     <GitlabProvider>
       <Header/>
       <GraphExample data={data} xAxisKey={'name'} width={400} height={400} grid={true} lines={lines} />
-      <div>
+          <div>
         <h1>Hello world</h1>
       </div>
     </GitlabProvider>
