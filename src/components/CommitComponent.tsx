@@ -26,7 +26,12 @@ export default function CommitComponent() {
     console.log(commits);
   }, [context.commits]);
 
-  function createData(title: string, author: string, commited_date: string, message: string) {
+  function createData(
+    title: string,
+    author: string,
+    commited_date: string,
+    message: string
+  ) {
     return {
       title: title,
       author: author,
@@ -35,19 +40,12 @@ export default function CommitComponent() {
     };
   }
 
-  /*
-  const oldRows = [
-    createData("bb", 159,  4.0, 3.99),
-    createData('Ice cream sandwich', 237,  4.3, 4.99),
-    createData('Eclair', 262,  6.0, 3.79),
-    createData('Cupcake', 305,  4.3, 2.5),
-    createData('Gingerbread', 356,  3.9, 1.5),
-  ];
-  */
   const rows: ReturnType<typeof createData>[] = commits.map((commit) => {
-      const date = new Date(commit.comitted_date)
-      console.log(date)
-    return createData(commit.title, commit.author_name, "dato", commit.message);
+    const yyyymmdd = commit.committed_date
+      .substring(0, commit.committed_date.indexOf("T"))
+      .split("-");
+    const date = yyyymmdd[2] + "/" + yyyymmdd[1];
+    return createData(commit.title, commit.author_name, date, commit.message);
   });
 
   function Row(props: { row: ReturnType<typeof createData> }) {
@@ -75,10 +73,12 @@ export default function CommitComponent() {
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant="body2" gutterBottom component="div">
-                  Message: {row.message}
-                  Author email:
+              <Box sx={{ margin: 1, ml: 2 }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Message:
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  {row.message}
                 </Typography>
               </Box>
             </Collapse>
@@ -90,7 +90,9 @@ export default function CommitComponent() {
 
   return (
     <div>
-      <h1>Commit Component</h1>
+      <Typography variant="h6" sx={{ my: 2, ml: 10 }}>
+        Commit log
+      </Typography>
       <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
         <Table stickyHeader aria-label="Commits-table">
           <TableHead>
@@ -103,7 +105,7 @@ export default function CommitComponent() {
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.title} row={row} />
+              <Row key={row.title + row.author} row={row} />
             ))}
           </TableBody>
         </Table>
