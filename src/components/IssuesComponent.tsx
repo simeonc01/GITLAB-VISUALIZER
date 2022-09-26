@@ -23,6 +23,7 @@ function IssuesComponent() {
   useEffect(() => {
     const tempIssues = context.issues;
     if (tempIssues !== null) setIssues(tempIssues);
+    console.log(tempIssues);
   }, [context.issues]);
 
   function createData(
@@ -44,7 +45,7 @@ function IssuesComponent() {
   const rows: ReturnType<typeof createData>[] = issues.map((issue) => {
     return createData(
       issue.title,
-      "User",
+      issue.author.username,
       issue.created_at,
       issue.closed_at,
       issue.description
