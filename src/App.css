@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+.outerColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.topRow{
+  display: flex;
+  flex-direction: row;
+}
+
+.bottomRow{
+  display: flex;
+  flex-direction: row;
+}
+
+.commitComponent {
+  margin-left: 50px;
+  height: 200px;
+  width: 400px;
+
+}
