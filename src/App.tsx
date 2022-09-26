@@ -69,9 +69,6 @@ function App() {
       <Header/>
       {/* <GraphExample data={data} xAxisKey={'name'} width={400} height={400} grid={true} lines={lines} /> */}
       <ProjectInfo />
-      <div>
-        <h1>Hello world</h1>
-      </div>
     </GitlabProvider>
   );
 }
