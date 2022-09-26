@@ -1,9 +1,9 @@
-import React from 'react';
-import './App.css';
-import GitlabProvider from './components/GitlabProvider';
-import { ApiHandler } from './util/api';
-import Header from './components/Header'
-import GraphExample from './components/GraphExample';
+import "./App.css";
+import GitlabProvider from "./components/GitlabProvider";
+import Header from "./components/Header";
+import GraphExample from "./components/GraphExample";
+import CommitComponent from "./components/CommitComponent/CommitComponent";
+import Paper from "@mui/material/Paper";
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF
