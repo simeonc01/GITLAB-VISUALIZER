@@ -44,7 +44,7 @@ export default function Header(props: Props) {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const [project, setProject] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openProject, setOpenProject] = useState(false);
 
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
@@ -56,8 +56,9 @@ export default function Header(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  // Open or close project adding.
   const click = () => {
-    setOpen(!open);
+    setOpenProject(!openProject);
   };
 
   const clearProject = () => {
@@ -72,7 +73,7 @@ export default function Header(props: Props) {
       setProject(true);
     }
     else {
-      console.log("Haha")
+      console.log("Haha, du token eller url er feil")
     }
     
   }
@@ -107,7 +108,7 @@ export default function Header(props: Props) {
   return (
     <div>
       <Modal
-        open={open}
+        open={openProject}
         onClose={click}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
