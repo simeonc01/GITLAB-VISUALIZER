@@ -51,12 +51,6 @@ export default function Header(props: Props) {
 
   const context = useContext(GitLabContext);
 
-  /**
-   * Do a check if there is a project in the local storage.
-   * If so, set the variabel project true. 
-   * If not, let it remain false.
-   */
-
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -71,11 +65,16 @@ export default function Header(props: Props) {
   };
 
   const updateProject = () => {
-    localStorage.setItem("token", tokenID);
-    localStorage.setItem("projectName", url);
-    context.update();
-    click();
-    setProject(true);
+    context.update(tokenID, url)
+    console.log(context.error)
+    if (!context.error) {
+      click();
+      setProject(true);
+    }
+    else {
+      console.log("Haha")
+    }
+    
   }
 
   const drawer = (
@@ -122,7 +121,7 @@ export default function Header(props: Props) {
           <p>
             Token id: {localStorage.getItem("token")}
           </p>
-          <h5 style={{color:"#0047AB"}} onClick={clearProject}>
+          <h5 style={{color:"#0047AB", textAlign:"center"}} onClick={clearProject}>
             Nytt prosjekt?
           </h5>
         </Box> 
