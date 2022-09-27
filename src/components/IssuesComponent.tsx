@@ -72,9 +72,11 @@ function IssuesComponent() {
             {row.title}
           </TableCell>
           <TableCell>{row.assignee}</TableCell>
-          <TableCell>{row.created.toString()}</TableCell>
+          <TableCell>{row.created.toString().slice(0, 10)}</TableCell>
           <TableCell align="right">
-            {row.closed !== null ? row.closed.toString() : "Still open"}
+            {row.closed !== null
+              ? row.closed.toString().slice(0, 10)
+              : "Still open"}
           </TableCell>
         </TableRow>
         <TableRow>
@@ -101,9 +103,9 @@ function IssuesComponent() {
 
   return (
     <div>
-      <h1>Issues Component</h1>
+      <h1>Issues</h1>
       <TableContainer component={Paper}>
-        <Table aria-label="Commits-table">
+        <Table aria-label="Issues-table">
           <TableHead>
             <TableRow>
               <TableCell />
