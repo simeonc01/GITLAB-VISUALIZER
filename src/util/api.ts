@@ -92,16 +92,16 @@ export class ApiHandler {
         }));
     }
 
-    public async updateDetails(token: string, projectString: string): Promise<boolean> {
-        if (this.token === token && this.originalProjectString === projectString) return Promise.resolve(false);
+    public updateDetails(token: string, projectString: string) {
+        if (this.token === token && this.originalProjectString === projectString) return false;
         this.token = token;
         this.handler.defaults.headers.common["PRIVATE-TOKEN"] = this.token;
         console.log(this.handler.defaults.headers.common["PRIVATE-TOKEN"]);
         const r = projectString.match(/(?<=\.no\/)[^\]]+/);
         if (r !== null) this.projectString = r[0];
         else this.projectString = "";
-        this.id = await this.getProjectId(this.projectString);
-        return Promise.resolve(true);
+        this.getProjectId(this.projectString).then(d => this.id = d);
+        return true;
     }
 
     public async getProjects(page?: number): Promise<Project[]> {
