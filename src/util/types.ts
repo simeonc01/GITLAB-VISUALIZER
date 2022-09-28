@@ -32,11 +32,11 @@ export type Milestone = {
 export type Commit = {
     author_email: string;
     author_name: string;
-    authored_date: Date;
-    comitted_date: Date;
-    comitter_email: string;
-    commiter_name: string;
-    created_at: Date;
+    authored_date: string;
+    committed_date: string;
+    committer_email: string;
+    committer_name: string;
+    created_at: string;
     id: string;
     message: string;
     parent_ids: string[];

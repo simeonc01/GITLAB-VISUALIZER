@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -16,6 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TextField from "@mui/material/TextField";
+import { GitLabContext } from './GitlabProvider';
 
 interface Props {
   window?: () => Window;
@@ -48,6 +49,8 @@ export default function Header(props: Props) {
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
 
+  const context = useContext(GitLabContext);
+
   /**
    * Do a check if there is a project in the local storage.
    * If so, set the variabel project true. 
@@ -65,8 +68,15 @@ export default function Header(props: Props) {
 
   const clearProject = () => {
     setProject(false)
-    
   };
+
+  const updateProject = () => {
+    localStorage.setItem("token", tokenID);
+    localStorage.setItem("projectName", url);
+    context.update();
+    click();
+    setProject(true);
+  }
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -107,10 +117,10 @@ export default function Header(props: Props) {
           <ArrowBackIcon onClick={click}/>
           <h2 style={{textAlign: "center"}}>Prosjekt Navn</h2>
           <p>
-            URL: ...
+            URL: {localStorage.getItem("projectName")}
           </p>
           <p>
-            Token id: ...
+            Token id: {localStorage.getItem("token")}
           </p>
           <h5 style={{color:"#0047AB"}} onClick={clearProject}>
             Nytt prosjekt?
@@ -153,6 +163,7 @@ export default function Header(props: Props) {
               fullWidth
               variant="contained"
               color="primary"
+              onClick={updateProject}
             >
               Hent prosjekt
             </Button>
@@ -189,8 +200,8 @@ export default function Header(props: Props) {
                   Legg til prosjekt
                 </Button> 
                 :
-                <Button onClick={click}  sx={{ color: '#fff' }}>
-                  Prosjekt Navn
+                <Button onClick={click}  sx={{ color: '#fff' }}> 
+                {context.currentProject !== null ? context.currentProject.name : "error"}
                 </Button>
                 }
               </div>

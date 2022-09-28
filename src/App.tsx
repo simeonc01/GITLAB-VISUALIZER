@@ -5,6 +5,7 @@ import { ApiHandler } from './util/api';
 import Header from './components/Header'
 import GraphExample from './components/GraphExample';
 import ProjectInfo from './components/ProjectInfo';
+import IssuesComponent from './components/IssuesComponent';
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF
