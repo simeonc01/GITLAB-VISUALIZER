@@ -4,6 +4,7 @@ import GitlabProvider from './components/GitlabProvider';
 import { ApiHandler } from './util/api';
 import Header from './components/Header'
 import GraphExample from './components/GraphExample';
+import Filter from './components/Filter'
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF
@@ -66,10 +67,14 @@ function App() {
   return (
     <GitlabProvider>
       <Header/>
+      <br/>
+      <Filter/>
+      <br/>
       <GraphExample data={data} xAxisKey={'name'} width={400} height={400} grid={true} lines={lines} />
       <div>
         <h1>Hello world</h1>
       </div>
+
     </GitlabProvider>
   );
 }
