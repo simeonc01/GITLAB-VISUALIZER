@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
@@ -10,6 +10,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
+    const [events, setEvents] = useState<Event[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -33,6 +34,11 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const getCurrentProject = (): Project | null => {
         if (error) return null;
         return currentProject;
+    }
+
+    const getEvents = (): Event[] | null => {
+        if (error) return null;
+        return events;
     }
 
     const updateData = () => {
@@ -77,7 +83,8 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             commits: getCommits(),
             branches: getBranches(), 
             issues: getIssues(), 
-            currentProject: getCurrentProject(), 
+            currentProject: getCurrentProject(),
+            events: getEvents(),
             error,
             loading,
             update

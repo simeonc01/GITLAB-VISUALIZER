@@ -183,12 +183,27 @@ export type Project = {
     wiki_enabled: boolean;
 }
 
+export type Event = {
+    id: number;
+    title: string | null;
+    project_id: number;
+    action_name: string;
+    target_id: number;
+    target_type: string;
+    author_id: number;
+    target_title: string;
+    created_at: string;
+    author: Author;
+    author_username: string;
+}
+
 // other types
 export interface IContextDefault {
     commits: Commit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
     currentProject: Project | null;
+    events: Event[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
@@ -199,6 +214,7 @@ export type UpdateData = {
     branches: Branch[];
     issues: Issue[];
     currentProject: Project;
+    events: Event[];
 }
 
 export type GitlabError = {
