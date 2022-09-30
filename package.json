@@ -54,9 +54,11 @@
     "@types/axios": "^0.14.0",
     "@types/node-fetch": "^2.6.2",
     "@types/react": "^18.0.20",
+    "@types/react-test-renderer": "^18.0.0",
     "@types/recharts": "^1.8.23",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
-    "eslint": "^8.23.1"
+    "eslint": "^8.23.1",
+    "react-test-renderer": "^18.2.0"
   }
 }
