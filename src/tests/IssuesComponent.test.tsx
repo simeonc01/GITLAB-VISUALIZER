@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import "@testing-library/jest-dom/extend-expect";
-import { cleanup } from "@testing-library/react";
-import ReactDOM from "react-dom";
+import { cleanup, render, screen } from "@testing-library/react";
+import { createRoot } from "react-dom/client";
 import renderer from "react-test-renderer";
 import IssuesComponent from "../components/IssuesComponent";
 
@@ -20,8 +20,7 @@ test("dateOpened is of type date", () => {});
 //Enheten skal også testes
 test("It renders Still Open when issue is not closed", () => {});
 
-test("It renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<IssuesComponent />, div);
-  ReactDOM.unmountComponentAtNode(div);
+test("It renders without crashing", async () => {
+  render(<IssuesComponent />);
+  //expect(await screen.findByText(/vwnorris/)).toBeInTheDocument();
 });
