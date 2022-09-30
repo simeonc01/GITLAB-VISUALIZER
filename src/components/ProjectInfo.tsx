@@ -51,7 +51,7 @@ const InfoBox = (props: {project: Project, labels: Label[]}) => {
                     <Typography variant='body1'>⭐ Your project has {props.project.star_count} stars</Typography>
                     <Typography variant='body1'>💪 The last activity was at {new Date(props.project.last_activity_at).toDateString()}</Typography>
                     <Typography variant='body1'>🥚 Your project was created at {new Date(props.project.created_at).toDateString()}</Typography>
-                    <Typography variant='body1'>🍴 Your project has been forked {props.project.forks_count}</Typography>
+                    <Typography variant='body1'>🍴 Your project has been forked {props.project.forks_count} times</Typography>
                 </Box>
                 <Divider orientation='vertical' flexItem/>
                 <Box sx={{
