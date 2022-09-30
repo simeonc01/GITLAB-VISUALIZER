@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -45,6 +46,7 @@ export default function Header(props: Props) {
 
   const [project, setProject] = useState(false);
   const [openProject, setOpenProject] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
@@ -56,24 +58,34 @@ export default function Header(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+
   // Open or close project adding.
   const click = () => {
     setOpenProject(!openProject);
+    console.log(context.currentProject !== null)
   };
 
+
+
   const clearProject = () => {
-    setProject(false)
+    setProject(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("projectName");
   };
+
+
 
   const updateProject = () => {
     context.update(tokenID, url)
     console.log(context.error)
     if (!context.error) {
+      setErrorMessage(false);
       click();
       setProject(true);
     }
     else {
-      console.log("Haha, du token eller url er feil")
+      console.log("Haha, du token eller url er feil");
+      setErrorMessage(true)
     }
     
   }
@@ -157,7 +169,9 @@ export default function Header(props: Props) {
               value={tokenID}
               onInput={(event: React.ChangeEvent<HTMLInputElement>) => setTokenID(event.target.value) }
             />
-            <br/><br/>
+            <br/>
+            {errorMessage && <Alert severity="error">URL og/eller Token ID er feil. Prøv igjen!</Alert>}
+            <br/>
             <Button
               type="submit"
               fullWidth
