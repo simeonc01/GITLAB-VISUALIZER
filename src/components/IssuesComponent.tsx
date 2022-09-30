@@ -51,8 +51,11 @@ function IssuesComponent() {
     let active = 0;
     myData.filter((issue) => {
       const thisDate = new Date(issue.created);
-      if (thisDate < now) {
-        issue.closed === null ? (active += 1) : (active += 0);
+
+      if (+thisDate <= +now) {
+        if (issue.closed === null || new Date(issue.closed) > now) {
+          active++;
+        }
       }
     });
     return active;
