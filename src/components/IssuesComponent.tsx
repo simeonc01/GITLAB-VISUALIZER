@@ -1,22 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Issue, Author } from "../util/types";
+import { Issue } from "../util/types";
+import {
+  AreaChart,
+  XAxis,
+  CartesianGrid,
+  YAxis,
+  Area,
+  Tooltip,
+} from "recharts";
 import { GitLabContext } from "./GitlabProvider";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
+  const [amount, setAmount] = useState<number>(0);
 
   const context = useContext(GitLabContext);
 
@@ -25,7 +21,6 @@ function IssuesComponent() {
     if (tempIssues !== null) setIssues(tempIssues);
     console.log(tempIssues);
   }, [context.issues]);
-
   function createData(
     title: string,
     assignee: string,
@@ -42,7 +37,7 @@ function IssuesComponent() {
     };
   }
 
-  const rows: ReturnType<typeof createData>[] = issues.map((issue) => {
+  const myData: ReturnType<typeof createData>[] = issues.map((issue) => {
     return createData(
       issue.title,
       issue.author.username,
@@ -52,76 +47,93 @@ function IssuesComponent() {
     );
   });
 
-  function Row(props: { row: ReturnType<typeof createData> }) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
+  function countActive(now: Date) {
+    let active = 0;
+    myData.filter((issue) => {
+      console.log(issue.created, now);
 
-    return (
-      <React.Fragment>
-        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-          <TableCell>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.title}
-          </TableCell>
-          <TableCell>{row.assignee}</TableCell>
-          <TableCell>{row.created.toString().slice(0, 10)}</TableCell>
-          <TableCell align="right">
-            {row.closed !== null
-              ? row.closed.toString().slice(0, 10)
-              : "Still open"}
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Description
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{row.description}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </React.Fragment>
-    );
+      issue.closed === null ? (active += 1) : (active += 0);
+      return active;
+    });
   }
+
+  const dummyData = [
+    {
+      date: "12.09",
+      issues: countActive(new Date(2022, 9, 12)),
+    },
+    {
+      date: "14.09",
+      issues: countActive(new Date(2022, 9, 14)),
+    },
+    {
+      date: "16.09",
+      issues: countActive(new Date(2022, 9, 16)),
+    },
+    {
+      date: "18.09",
+      issues: countActive(new Date(2022, 9, 18)),
+    },
+    {
+      date: "20.09",
+      issues: countActive(new Date(2022, 9, 20)),
+    },
+    {
+      date: "22.09",
+      issues: countActive(new Date(2022, 9, 22)),
+    },
+    {
+      date: "24.09",
+      issues: countActive(new Date(2022, 9, 24)),
+    },
+    {
+      date: "26.09",
+      issues: countActive(new Date(2022, 9, 26)),
+    },
+    {
+      date: "28.09",
+      issues: countActive(new Date(2022, 9, 28)),
+    },
+    {
+      date: "30.09",
+      issues: countActive(new Date(2022, 9, 30)),
+    },
+    {
+      date: "02.10",
+      issues: countActive(new Date(2022, 10, 2)),
+    },
+    {
+      date: "04.10",
+      issues: countActive(new Date(2022, 10, 4)),
+    },
+  ];
 
   return (
     <div>
-      <h1>Issues</h1>
-      <TableContainer component={Paper}>
-        <Table aria-label="Issues-table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Issue</TableCell>
-              <TableCell>Author</TableCell>
-              <TableCell>Date created</TableCell>
-              <TableCell align="right">Date closed</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.title} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <AreaChart
+        width={1000}
+        height={250}
+        data={dummyData}
+        margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
+      >
+        <defs>
+          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#154734" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="date" />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Area
+          type="monotone"
+          dataKey="issues"
+          stroke="#8884d8"
+          fillOpacity={1}
+          fill="url(#colorUv)"
+        />
+      </AreaChart>
     </div>
   );
 }
