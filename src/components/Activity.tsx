@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Divider, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, CircularProgress, Divider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Box from '@mui/material/Box';
 import React, { useContext, useEffect, useState } from 'react';
+import { AreaChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Event } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
 
@@ -10,9 +11,18 @@ enum DataTypes {
     Type = "Type"
 }
 
-const EnumBox = (props: {text: any}) => {
+interface BetterEvent extends Event {created_at_date: Date}
+
+const DrawChart = (props: {data: Event[], type: DataTypes}) => {
+    const d: BetterEvent[] = props.data.map((e: Event) => ({created_at_date: new Date(e.created_at), ...e}));
+    
     return (
-        <ToggleButton value={props.text}>{props.text}</ToggleButton>
+        <ResponsiveContainer>
+            <AreaChart data={props.data}>
+                {props.type === DataTypes.Date && <XAxis dataKey="created_at_date"/>}
+                <YAxis/>
+            </AreaChart>
+        </ResponsiveContainer>
     )
 }
 
@@ -42,7 +52,13 @@ const Activity = () => {
             display: 'flex',
             flexDirection: 'column'
         }}>
-            <Box></Box>
+            <Box sx={{
+                width: '700px'
+            }}>
+                {context.loading && <CircularProgress/>}
+                {!context.loading && <DrawChart data={events} type={type}/>}
+                
+            </Box>
             <Divider orientation='vertical'/>
             <ToggleButtonGroup value={type} exclusive onChange={handleChangeType} orientation='vertical'>
                 {/* {(Object.keys(DataTypes) as Array<keyof typeof DataTypes>).map(k => <EnumBox key={k} text={k}/>)} */}
