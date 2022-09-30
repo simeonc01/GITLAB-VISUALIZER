@@ -118,7 +118,7 @@ export type Project = {
     container_registry_access_level: string;
     container_registry_enabled: boolean;
     container_registry_image_prefix: string;
-    created_at: Date;
+    created_at: string;
     creator_id: number;
     default_branch: string;
     description: string | null;
@@ -135,7 +135,7 @@ export type Project = {
     issues_enabled: string;
     jobs_enabled: string;
     keep_latest_artifact: string;
-    last_activity_at: Date;
+    last_activity_at: string;
     lfs_enabled: boolean;
     merge_commit_template: string | null;
     merge_method: string;
@@ -183,11 +183,27 @@ export type Project = {
     wiki_enabled: boolean;
 }
 
+export type Label = {
+    id: number;
+    name: string;
+    color: string;
+    text_color: string;
+    description: string;
+    description_html: string;
+    open_issue_count: number;
+    closed_issues_count: number;
+    open_merge_requests_count: number;
+    subscribed: boolean;
+    priority: string | null;
+    is_project_label: boolean;
+}
+
 // other types
 export interface IContextDefault {
     commits: Commit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
+    labels: Label[] | null;
     currentProject: Project | null;
     error: boolean;
     loading: boolean;
@@ -199,6 +215,7 @@ export type UpdateData = {
     branches: Branch[];
     issues: Issue[];
     currentProject: Project;
+    labels: Label[];
 }
 
 export type GitlabError = {

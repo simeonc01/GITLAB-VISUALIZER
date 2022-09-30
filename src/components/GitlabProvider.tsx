@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Label, Project } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
@@ -10,6 +10,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
+    const [labels, setLabels] = useState<Label[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -35,6 +36,11 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         return currentProject;
     }
 
+    const getLabels = (): Label[] | null => {
+        if (error) return null;
+        return labels;
+    }
+
     const updateData = () => {
         setLoading(true);
         apiHandler.update().then(data => {
@@ -42,6 +48,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             setBranches(data.branches);
             setIssues(data.issues);
             setCurrentProject(data.currentProject);
+            setLabels(data.labels);
             setLoading(false);
         }).catch((err: GitlabError) => {
             setError(true);
@@ -52,7 +59,6 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     useEffect(() => {
         update();
-
     }, []);
 
     const update = async () => {
@@ -77,6 +83,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             commits: getCommits(),
             branches: getBranches(), 
             issues: getIssues(), 
+            labels: getLabels(),
             currentProject: getCurrentProject(), 
             error,
             loading,

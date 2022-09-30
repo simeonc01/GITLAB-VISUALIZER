@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import { Branch, Commit, Issue, Project, UpdateData } from './types';
+import { Branch, Commit, Issue, Label, Project, UpdateData } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
     return new Promise<T>((resolve, reject) => {
@@ -32,10 +32,7 @@ export class ApiHandler {
         this.token = token;
         this.handler = axios.create({
             baseURL: `https://gitlab.stud.idi.ntnu.no/api/v4`,
-            timeout: 3000,
-            headers: {
-                'PRIVATE-TOKEN': token
-            }
+            timeout: 3000
         });
     }
 
@@ -45,13 +42,15 @@ export class ApiHandler {
                 this.getCommits(),
                 this.getBranches(),
                 this.getIssues(),
-                this.getCurrentProject()
+                this.getCurrentProject(),
+                this.getLabels()
             ]).then(data => {
                 resolve({
                     commits: data[0],
                     branches: data[1],
                     issues: data[2],
-                    currentProject: data[3]
+                    currentProject: data[3],
+                    labels: data[4]
                 });
             }).catch(error => {
                 reject({
@@ -85,10 +84,7 @@ export class ApiHandler {
                 data: null
             });
         return wrapPromise<Project>(this.handler.get(`/projects/${this.id}`, {
-            validateStatus: (status) => status === 200,
-            headers: {
-                'PRIVATE-TOKEN': this.token
-            }
+            validateStatus: (status) => status === 200
         }));
     }
 
@@ -122,10 +118,7 @@ export class ApiHandler {
 
         return wrapPromise<Commit[]>(
             this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
-                validateStatus: (code: number) => code === 200,
-                headers: {
-                    'PRIVATE-TOKEN': this.token
-                }
+                validateStatus: (code: number) => code === 200
             })
         );
     }
@@ -139,10 +132,7 @@ export class ApiHandler {
         
         return wrapPromise<Issue[]>(
             this.handler.get(`/projects/${this.id}/issues?per_page=100`, {
-                validateStatus: (code: number) => code === 200,
-                headers: {
-                    'PRIVATE-TOKEN': this.token
-                }
+                validateStatus: (code: number) => code === 200
             })
         );
     }
@@ -155,12 +145,23 @@ export class ApiHandler {
             });
         
         return wrapPromise<Branch[]>(
-            this.handler.get(`/projects/${encodeURIComponent(this.id)}/repository/branches?per_page=100`, {
-                validateStatus: (code: number) => code === 200,
-                headers: {
-                    'PRIVATE-TOKEN': this.token
-                }
+            this.handler.get(`/projects/${this.id}/repository/branches?per_page=100`, {
+                validateStatus: (code: number) => code === 200
             })
         );
+    }
+
+    public async getLabels(): Promise<Label[]> {
+        if (this.id < 0)
+            return Promise.reject<Label[]>({
+                message: "Project ID was not set", 
+                data: null
+            });
+        
+        return wrapPromise<Label[]>(
+            this.handler.get<Label[]>(`/projects/${this.id}/labels`, {
+                validateStatus: (code: number) => code === 200
+            })
+        )
     }
 }
