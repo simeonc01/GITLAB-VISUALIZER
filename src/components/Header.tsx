@@ -120,7 +120,7 @@ export default function Header(props: Props) {
           </ListItem> :
           <ListItem key={"Prosjekt Navn"} disablePadding >
             <ListItemButton sx={{ textAlign: 'center'}}>
-              <ListItemText primary={"Prosjekt Navn"}/>
+              <ListItemText primary={!context.loading ? currentProject.name : "error"}/>
             </ListItemButton>
           </ListItem> 
           }
@@ -141,7 +141,7 @@ export default function Header(props: Props) {
       >{project?
         <Box sx={{ ...style }}>
           <ArrowBackIcon onClick={click}/>
-          <h2 style={{textAlign: "center"}}>Prosjekt Navn</h2>
+          <h2 style={{textAlign: "center"}}>{!context.loading ? currentProject.name : ""}</h2>
           <p>
             URL: {localStorage.getItem("projectName")}
           </p>
@@ -229,7 +229,7 @@ export default function Header(props: Props) {
                 </Button> 
                 :
                 <Button onClick={click}  sx={{ color: '#fff' }}> 
-                {!context.loading ? currentProject.name : "error"}
+                {!context.loading ? currentProject.name : ""}
                 </Button>
                 }
               </div>
