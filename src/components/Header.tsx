@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,6 +18,7 @@ import Modal from '@mui/material/Modal';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TextField from "@mui/material/TextField";
 import { GitLabContext } from './GitlabProvider';
+import { Project } from '../util/types';
 
 interface Props {
   window?: () => Window;
@@ -47,12 +48,24 @@ export default function Header(props: Props) {
   const [project, setProject] = useState(false);
   const [openProject, setOpenProject] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Project>({} as Project);
 
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
 
   const context = useContext(GitLabContext);
 
+  useEffect(() => {
+    console.log("we in the loading effect?=")
+    if (context.loading === false) {
+      console.log("we done loading")
+      const p = context.currentProject;
+      if (p !== null) {
+        setCurrentProject(p);
+        setProject(true);
+      }
+    }
+  }, [context.loading])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -76,7 +89,9 @@ export default function Header(props: Props) {
 
 
   const updateProject = () => {
-    context.update(tokenID, url)
+    localStorage.setItem("token", tokenID);
+    localStorage.setItem("projectName", url);
+    context.update();
     console.log(context.error)
     if (!context.error) {
       setErrorMessage(false);
@@ -84,7 +99,6 @@ export default function Header(props: Props) {
       setProject(true);
     }
     else {
-      console.log("Haha, du token eller url er feil");
       setErrorMessage(true)
     }
     
@@ -215,7 +229,7 @@ export default function Header(props: Props) {
                 </Button> 
                 :
                 <Button onClick={click}  sx={{ color: '#fff' }}> 
-                {context.currentProject !== null ? context.currentProject.name : "error"}
+                {!context.loading ? currentProject.name : "error"}
                 </Button>
                 }
               </div>

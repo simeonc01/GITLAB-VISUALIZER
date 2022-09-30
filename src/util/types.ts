@@ -191,7 +191,7 @@ export interface IContextDefault {
     currentProject: Project | null;
     error: boolean;
     loading: boolean;
-    update: (token: string | null, projectName: string | null) => void;
+    update: () => void;
 }
 
 export type UpdateData = {

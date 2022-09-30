@@ -51,22 +51,23 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     }
 
     useEffect(() => {
-        update(localStorage.getItem("token"), localStorage.getItem("projectName"));
+        update();
 
     }, []);
 
-    const update = async (token: string | null , projectName: string | null) => {
-        if (token === null || projectName === null){
+    const update = async () => {
+        setError(false);
+        const token = localStorage.getItem("token");
+        const projectName = localStorage.getItem("projectName");
+        console.log(token, projectName);    
+        if (token === null || projectName === null) {
             setError(true);
             return;
         }
 
         const success = await apiHandler.updateDetails(token, projectName);
-
         if (!error && success) {
             updateData();
-            localStorage.setItem("token", token);
-            localStorage.setItem("projectName", projectName);
         } else
             console.error("Context is not setup correctly, need a valid Token and projectName")
     }
