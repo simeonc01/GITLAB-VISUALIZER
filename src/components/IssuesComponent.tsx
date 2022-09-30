@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Issue, Author } from "../util/types";
+import { Issue } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -41,10 +41,10 @@ function IssuesComponent() {
     };
   }
 
-  const rows: ReturnType<typeof createData>[] = issues.map((issue) => {
+  const rows: ReturnType<typeof createData>[] = issues?.map((issue) => {
     return createData(
       issue.title,
-      "User",
+      issue.author.username,
       issue.created_at,
       issue.closed_at,
       issue.description
@@ -71,9 +71,11 @@ function IssuesComponent() {
             {row.title}
           </TableCell>
           <TableCell>{row.assignee}</TableCell>
-          <TableCell>{row.created.toString()}</TableCell>
-          <TableCell align="right">
-            {row.closed !== null ? row.closed.toString() : "Still open"}
+          <TableCell>{row.created.toString().slice(0, 10)}</TableCell>
+          <TableCell align="right" data-testid="dateOpened">
+            {row.closed !== null
+              ? row.closed.toString().slice(0, 10)
+              : "Still open"}
           </TableCell>
         </TableRow>
         <TableRow>
@@ -113,7 +115,7 @@ function IssuesComponent() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows?.map((row) => (
               <Row key={row.title} row={row} />
             ))}
           </TableBody>
