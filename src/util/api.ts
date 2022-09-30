@@ -93,15 +93,16 @@ export class ApiHandler {
     }
 
     public async updateDetails(token: string, projectString: string): Promise<boolean> {
-        if (this.token === token && this.originalProjectString === projectString) return Promise.resolve(false);
+        if (this.token === token && this.originalProjectString === projectString) return Promise.resolve<boolean>(true);
         this.token = token;
         this.handler.defaults.headers.common["PRIVATE-TOKEN"] = this.token;
-        console.log(this.handler.defaults.headers.common["PRIVATE-TOKEN"]);
         const r = projectString.match(/(?<=\.no\/)[^\]]+/);
         if (r !== null) this.projectString = r[0];
         else this.projectString = "";
-        this.id = await this.getProjectId(this.projectString);
-        return Promise.resolve(true);
+        const id = await this.getProjectId(this.projectString);
+        if (id < 0) Promise.resolve<boolean>(false);
+        this.id = id;
+        return Promise.resolve<boolean>(true);
     }
 
     public async getProjects(page?: number): Promise<Project[]> {
