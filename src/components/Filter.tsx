@@ -2,59 +2,77 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { MobileDateRangePicker } from '@mui/x-date-pickers-pro/MobileDateRangePicker';
-import { DesktopDateRangePicker } from '@mui/x-date-pickers-pro/DesktopDateRangePicker';
-import { DateRange } from '@mui/x-date-pickers-pro/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
-export default function ResponsiveDateRangePicker() {
-  const [value, setValue] = React.useState<DateRange<Dayjs>>([dayjs(localStorage.getItem("startDate")), dayjs(localStorage.getItem("endDate"))]);
 
-  
+
+export default function Filter() {
+
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(
+    dayjs(sessionStorage.getItem("startDate")),
+  );
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(
+    dayjs(sessionStorage.getItem("endDate")),
+  );
+
+    
   useEffect(() => {
-    if (localStorage.getItem("startDate") == "Invalid Date" || localStorage.getItem("endDate") == "Invalid Date" ) {
-      setValue([null, null]);
+    if (sessionStorage.getItem("startDate") == "Invalid Date" || sessionStorage.getItem("endDate") == "Invalid Date" ) {
+        setStartDate(null);
+        setEndDate(null);
     }
   }, []);
 
-
+  
   useEffect(() => {
-    const startDate = value[0]?.toDate().toDateString();
-    const endDate = value[1]?.toDate().toDateString()
+    const startDateValue = startDate?.toDate().toDateString();
+    const endDateValue = endDate?.toDate().toDateString();
 
-    if (startDate !== undefined && endDate !== undefined) {
-        localStorage.setItem("startDate", startDate);
-        localStorage.setItem("endDate", endDate);
+    if (startDateValue !== undefined && startDate !== undefined && endDate !== undefined && endDateValue !== undefined) {
+        if (endDate?.isBefore(startDate)) {
+          setStartDate(endDate);
+          setEndDate(startDate);
+          return;
+        }
+        sessionStorage.setItem("startDate", startDateValue);
+        sessionStorage.setItem("endDate", endDateValue);
     }
-  }, [value]);
+  }, [startDate, endDate]); 
+
+
+  const handleChangeStartDate = (newValue: Dayjs | null) => {
+    setStartDate(newValue);
+  };
+
+
+  const handleChangeEndDate = (newValue: Dayjs | null) => {
+    setEndDate(newValue);
+  };
 
 
   return (
-    <Stack spacing={3}>
-      <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-        localeText={{ start: 'Startdato', end: 'Sluttdato' }}
-      >
-        <MobileDateRangePicker
-          
-          value={value}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack spacing={3}>
+      <DesktopDatePicker
+          label="Startdato"
+          inputFormat="DD/MM/YYYY"
+          value={startDate}
+          onChange={handleChangeStartDate}
           disableFuture={true}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(startProps, endProps) => (
-            <React.Fragment>
-              <TextField {...startProps} />
-              <Box sx={{ mx: 2 }}> til </Box>
-              <TextField {...endProps} />
-            </React.Fragment>
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />
-      </LocalizationProvider>
-      
-    </Stack>
+        <DesktopDatePicker
+          label="Sluttdato"
+          inputFormat="DD/MM/YYYY"
+          value={endDate}
+          onChange={handleChangeEndDate}
+          disableFuture={true}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </Stack>
+    </LocalizationProvider>
   );
 }
