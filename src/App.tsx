@@ -1,7 +1,10 @@
-import "./App.css";
-import GitlabProvider from "./components/GitlabProvider";
-import Header from "./components/Header";
-import GraphExample from "./components/GraphExample";
+import React from 'react';
+import './App.css';
+import GitlabProvider from './components/GitlabProvider';
+import { ApiHandler } from './util/api';
+import Header from './components/Header'
+import GraphExample from './components/GraphExample';
+import Filter from './components/Filter'
 import CommitComponent from "./components/CommitComponent/CommitComponent";
 import Paper from "@mui/material/Paper";
 import ProjectInfo from './components/ProjectInfo';
@@ -67,6 +70,14 @@ function App() {
   return (
     <GitlabProvider>
       <Header/>
+      <br/>
+      <Filter/>
+      <br/>
+      <GraphExample data={data} xAxisKey={'name'} width={400} height={400} grid={true} lines={lines} />
+          <div>
+        <h1>Hello world</h1>
+      </div>
+
       {/* <GraphExample data={data} xAxisKey={'name'} width={400} height={400} grid={true} lines={lines} /> */}
       <ProjectInfo />
     </GitlabProvider>
