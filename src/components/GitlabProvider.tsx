@@ -48,6 +48,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             setBranches(data.branches);
             setIssues(data.issues);
             setCurrentProject(data.currentProject);
+            setEvents(data.events);
             setLoading(false);
         }).catch((err: GitlabError) => {
             setError(true);
