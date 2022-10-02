@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import { Branch, Commit, Issue, Project, UpdateData, Event } from './types';
+import { Branch, Commit, Issue, Project, UpdateData, Event, Label } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
     return new Promise<T>((resolve, reject) => {
@@ -44,14 +44,16 @@ export class ApiHandler {
                 this.getBranches(),
                 this.getIssues(),
                 this.getCurrentProject(),
-                this.getEvents()
+                this.getEvents(),
+                this.getLabels()
             ]).then(data => {
                 resolve({
                     commits: data[0],
                     branches: data[1],
                     issues: data[2],
                     currentProject: data[3],
-                    events: data[4]
+                    events: data[4],
+                    labels: data[5]
                 });
             }).catch(error => {
                 reject({
@@ -90,14 +92,16 @@ export class ApiHandler {
     }
 
     public async updateDetails(token: string, projectString: string): Promise<boolean> {
-        if (this.token === token && this.originalProjectString === projectString) return Promise.resolve(false);
+        if (this.token === token && this.originalProjectString === projectString) return Promise.resolve<boolean>(true);
         this.token = token;
         this.handler.defaults.headers.common["PRIVATE-TOKEN"] = this.token;
         const r = projectString.match(/(?<=\.no\/)[^\]]+/);
         if (r !== null) this.projectString = r[0];
         else this.projectString = "";
-        this.id = await this.getProjectId(this.projectString);
-        return Promise.resolve(true);
+        const id = await this.getProjectId(this.projectString);
+        if (id < 0) Promise.resolve<boolean>(false);
+        this.id = id;
+        return Promise.resolve<boolean>(true);
     }
 
     public async getProjects(page?: number): Promise<Project[]> {
@@ -163,4 +167,17 @@ export class ApiHandler {
             })
         )
     }   
+    public async getLabels(): Promise<Label[]> {
+        if (this.id < 0)
+            return Promise.reject<Label[]>({
+                message: "Project ID was not set", 
+                data: null
+            });
+        
+        return wrapPromise<Label[]>(
+            this.handler.get<Label[]>(`/projects/${this.id}/labels`, {
+                validateStatus: (code: number) => code === 200
+            })
+        )
+    }
 }

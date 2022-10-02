@@ -49,6 +49,7 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
     const [filteredData, setFilteredData] = useState<{index: string, count: number}[]>([]);
     
     useEffect(() => {
+        console.log(props.data);
         setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
     }, [props.data]);
 
@@ -63,7 +64,7 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
     }, [data, props.type])
 
     return (
-        <ResponsiveContainer width='100%' height={'100%'}>
+        <ResponsiveContainer width='100%' height={250}>
             <ComposedChart data={filteredData} width={100} height={100}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <defs>
@@ -94,7 +95,6 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
 }
 
 const Activity = () => {
-
     const [events, setEvents] = useState<Event[]>([]);
     const [type, setType] = useState<DataTypes>(DataTypes.Date);
 

@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
@@ -11,6 +11,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
     const [events, setEvents] = useState<Event[]>([]);
+    const [labels, setLabels] = useState<Label[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -40,6 +41,11 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         if (error) return null;
         return events;
     }
+    
+    const getLabels = (): Label[] | null => {
+        if (error) return null;
+        return labels;
+    }
 
     const updateData = () => {
         setLoading(true);
@@ -49,6 +55,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             setIssues(data.issues);
             setCurrentProject(data.currentProject);
             setEvents(data.events);
+            setLabels(data.labels);
             setLoading(false);
         }).catch((err: GitlabError) => {
             setError(true);
@@ -59,23 +66,22 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     useEffect(() => {
         update();
-
     }, []);
 
     const update = async () => {
+        setError(false);
         const token = localStorage.getItem("token");
         const projectName = localStorage.getItem("projectName");
-
-        if (token === null || projectName === null){
+        console.log(token, projectName);    
+        if (token === null || projectName === null) {
             setError(true);
             return;
         }
 
         const success = await apiHandler.updateDetails(token, projectName);
-
-        if (!error && success)
+        if (!error && success) {
             updateData();
-        else
+        } else
             console.error("Context is not setup correctly, need a valid Token and projectName")
     }
 
@@ -86,6 +92,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             issues: getIssues(), 
             currentProject: getCurrentProject(),
             events: getEvents(),
+            labels: getLabels(),
             error,
             loading,
             update
