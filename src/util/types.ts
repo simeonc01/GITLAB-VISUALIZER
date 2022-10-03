@@ -185,7 +185,7 @@ export type Project = {
 
 // other types
 export interface IContextDefault {
-    commits: Commit[] | null;
+    commits: BetterCommit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
     currentProject: Project | null;

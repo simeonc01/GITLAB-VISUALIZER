@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, BetterCommit } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, BetterCommit } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
@@ -15,7 +15,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const apiHandler = new ApiHandler("", "");
 
-    const getCommits = (): Commit[] | null => {
+    const getCommits = (): BetterCommit[] | null => {
         if (error) return null;
         return commits;
     }

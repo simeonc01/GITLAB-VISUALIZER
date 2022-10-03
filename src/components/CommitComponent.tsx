@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import "./CommitComponent.css"
-import { Commit } from "../util/types";
+import "./CommitComponent.css";
+import { BetterCommit, Commit } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import {
   Bar,
@@ -19,14 +19,20 @@ interface IVisualData {
 }
 
 export default function CommitComponent() {
-  const [commits, setCommits] = useState<Commit[]>([]);
+  const [commits, setCommits] = useState<BetterCommit[]>([]);
   const [visualData, setVisualData] = useState<IVisualData[]>([]);
 
   const context = useContext(GitLabContext);
 
   useEffect(() => {
     const tempCommits = context.commits;
-    if (tempCommits !== null) setCommits(tempCommits);
+    if (tempCommits !== null) {
+      tempCommits.sort((a, b) => {
+        if (a.created_at < b.created_at) return 1;
+        return -1;
+      });
+      setCommits(tempCommits);
+    }
     createVisualData();
     console.log(tempCommits);
   }, [context.commits]);
@@ -55,33 +61,44 @@ export default function CommitComponent() {
     setVisualData(tempVisualData);
   };
 
-  return (
-    <div className="row">
-      <div className="column">
-      <Typography variant="h6" sx={{ my: 2, ml: 5 }}>
-        Commits
-      </Typography>
-      <BarChart
-        width={500}
-        height={250}
-        data={visualData}
-        barCategoryGap={"30%"}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="author" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar
-          name="Number of Commits"
-          dataKey="numberOfCommits"
-          fill="#8884d8"
-        />
-      </BarChart>
+  if (commits.length !== 0)
+    return (
+      <div className="row">
+        <div className="column">
+          <Typography variant="h6" sx={{ my: 2, ml: 5 }}>
+            Commits
+          </Typography>
+          <BarChart
+            width={500}
+            height={250}
+            data={visualData}
+            barCategoryGap={"30%"}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="author" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar
+              name="Number of Commits"
+              dataKey="numberOfCommits"
+              fill="#8884d8"
+            />
+          </BarChart>
+        </div>
+        <div className="column">
+          <Typography variant="h6" sx={{ mt: 8, ml: 3 }}>
+            Number of commits: {commits.length}
+          </Typography>
+          <Typography variant="h6" sx={{ my: 1, ml: 3 }}>
+            Last commit by: {commits[0].author_name}
+          </Typography>
+          <Typography variant="h6" sx={{ my: 1, ml: 3 }}>
+            Date of last commit: {commits[0].created_at_date.getDate() + "/" + (commits[0].created_at_date.getMonth()+1)}
+          </Typography>
+        </div>
       </div>
-      <Typography variant="h6" sx={{ my: 2, ml: 5, mt: 8 }}>
-        Number of commits: {commits.length}
-      </Typography>
-    </div>
-  );
+    );
+
+  return <></>;
 }
