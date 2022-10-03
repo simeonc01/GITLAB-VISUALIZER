@@ -245,3 +245,8 @@ export type LineType = {
     dataKey: string;
     stroke?: string;
 }
+
+export type FilterType = {
+    startDate: Date | null;
+    endDate: Date | null;
+}

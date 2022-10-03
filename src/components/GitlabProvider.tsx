@@ -1,11 +1,12 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
+    const [filter, setFilter] = useState<FilterType>({startDate: null, endDate: null});
     const [commits, setCommits] = useState<Commit[]>([]);
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
@@ -64,8 +65,28 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         });
     }
 
+    const listenSessionStorage = (event: StorageEvent): void => {
+        if (event.storageArea === sessionStorage) {
+            const f = {startDate: sessionStorage.getItem("startDate"), endDate: sessionStorage.getItem("endDate")};
+            const filter: FilterType = {
+                startDate: null,
+                endDate: null
+            };
+            filter.startDate = f.startDate !== null ? new Date(f.startDate) : null;
+            filter.endDate = f.endDate !== null ? new Date(f.endDate) : null;
+            setFilter(filter);
+        }
+    }
+
+    useEffect(() => {
+        console.log(filter);
+    }, [filter]);
+
     useEffect(() => {
         update();
+        
+        window.addEventListener('storage', listenSessionStorage);
+        return () => window.removeEventListener('storage', listenSessionStorage);
     }, []);
 
     const update = async () => {

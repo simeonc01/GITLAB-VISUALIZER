@@ -8,9 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-
-
 
 export default function Filter() {
 
@@ -19,7 +16,6 @@ export default function Filter() {
 
   const [resetOption, setResetOption] = React.useState(false);
 
-    
   useEffect(() => {
     if (sessionStorage.getItem("startDate") == "Invalid Date" || sessionStorage.getItem("endDate") == "Invalid Date" ) {
         setStartDate(null);
@@ -38,8 +34,10 @@ export default function Filter() {
           setEndDate(startDate);
           return;
         }
+
         sessionStorage.setItem("startDate", startDateValue);
         sessionStorage.setItem("endDate", endDateValue);
+        window.dispatchEvent(new StorageEvent('storage', {storageArea: sessionStorage})); // needed to make sure storage event is actually fired (for some reason its needed)
         if (sessionStorage.getItem("startDate") !== "Invalid Date" || sessionStorage.getItem("endDate") !== "Invalid Date") {
           setResetOption(true)
         }
