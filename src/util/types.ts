@@ -211,3 +211,7 @@ export type LineType = {
     dataKey: string;
     stroke?: string;
 }
+
+export interface BetterCommit extends Commit {
+    created_at_date: Date
+}

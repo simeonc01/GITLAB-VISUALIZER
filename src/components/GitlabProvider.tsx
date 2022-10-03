@@ -1,12 +1,12 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, BetterCommit } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
-    const [commits, setCommits] = useState<Commit[]>([]);
+    const [commits, setCommits] = useState<BetterCommit[]>([]);
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
@@ -38,7 +38,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const updateData = () => {
         setLoading(true);
         apiHandler.update().then(data => {
-            setCommits(data.commits);
+            setCommits(data.commits.map((e: Commit) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
             setBranches(data.branches);
             setIssues(data.issues);
             setCurrentProject(data.currentProject);
