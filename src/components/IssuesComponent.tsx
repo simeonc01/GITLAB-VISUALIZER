@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { GitLabContext } from "./GitlabProvider";
+import Container from "./LayoutContainer";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -279,39 +280,45 @@ function IssuesComponent() {
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "500px 150px" }}>
-      <div>
-        <h3 style={{ textAlign: "center" }}>Active issues over time</h3>
-        <AreaChart width={500} height={250} data={graphData}>
-          <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#154734" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="date" />
-          <YAxis padding={{ top: 10 }} />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="issues"
-            stroke="#8884d8"
-            fillOpacity={1}
-            fill="url(#colorUv)"
-          />
-        </AreaChart>
+    <Container>
+      <div style={{ display: "grid", gridTemplateColumns: "500px 150px" }}>
+        <div>
+          <h3 style={{ textAlign: "center" }}>Active issues over time</h3>
+          <AreaChart width={500} height={250} data={graphData}>
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#154734" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="date" />
+            <YAxis padding={{ top: 10 }} />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="issues"
+              stroke="#8884d8"
+              fillOpacity={1}
+              fill="url(#colorUv)"
+            />
+          </AreaChart>
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            paddingTop: "50px",
+            paddingLeft: "10px",
+          }}
+        >
+          <p>Total issues:</p>
+          <h3>{myData.length}</h3>
+          <p>Total closed issues:</p>
+          <h3>{countAllClosed()}</h3>
+          <p>The last issue was created by {lastAuthor()}</p>
+        </div>
       </div>
-      <div
-        style={{ textAlign: "center", paddingTop: "50px", paddingLeft: "10px" }}
-      >
-        <p>Total issues:</p>
-        <h3>{myData.length}</h3>
-        <p>Total closed issues:</p>
-        <h3>{countAllClosed()}</h3>
-        <p>The last issue was created by {lastAuthor()}</p>
-      </div>
-    </div>
+    </Container>
   );
 }
 
