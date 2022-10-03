@@ -96,7 +96,7 @@ export type Issue = {
 
 export type Project = {
     _links: object;
-    allow_merge_on_skipped_pipeline: any;
+    allow_merge_on_skipped_pipeline: unknown;
     analytics_access_level: string;
     archived: boolean;
     auto_cancel_pending_pipelines: string;

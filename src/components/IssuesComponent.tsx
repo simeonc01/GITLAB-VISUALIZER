@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Issue, Author } from "../util/types";
+import { Issue } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -23,7 +23,6 @@ function IssuesComponent() {
   useEffect(() => {
     const tempIssues = context.issues;
     if (tempIssues !== null) setIssues(tempIssues);
-    console.log(tempIssues);
   }, [context.issues]);
 
   function createData(

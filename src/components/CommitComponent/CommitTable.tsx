@@ -5,7 +5,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 export default function CommitTable( props: { rows: ReturnType<typeof createData>[] }) {
-    console.log(props.rows)
   const Row = (props: { row: ReturnType<typeof createData> }) => {
     const { row } = props;
     const [open, setOpen] = React.useState(false);

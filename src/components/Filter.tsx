@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+import Container from './LayoutContainer';
 
 
 
@@ -66,29 +66,31 @@ export default function Filter() {
 
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Stack direction="row" spacing={4}>
-      <DesktopDatePicker
-          
-          label="Startdato"
-          inputFormat="DD/MM/YYYY"
-          value={startDate}
-          onChange={handleChangeStartDate}
-          disableFuture={true}
-          renderInput={(params) => <TextField {...params} />}
-        />
+    <Container ignoreHeightWidth>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack direction="row" spacing={4}>
         <DesktopDatePicker
-          label="Sluttdato"
-          inputFormat="DD/MM/YYYY"
-          value={endDate}
-          onChange={handleChangeEndDate}
-          disableFuture={true}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        {resetOption && <Button onClick={resetDates} variant="outlined" startIcon={<DeleteIcon />}>
-          Nullstill
-        </Button> }
-      </Stack>
-    </LocalizationProvider>
+            
+            label="Start date"
+            inputFormat="DD/MM/YYYY"
+            value={startDate}
+            onChange={handleChangeStartDate}
+            disableFuture={true}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <DesktopDatePicker
+            label="End date"
+            inputFormat="DD/MM/YYYY"
+            value={endDate}
+            onChange={handleChangeEndDate}
+            disableFuture={true}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          {resetOption && <Button onClick={resetDates} variant="outlined" startIcon={<DeleteIcon />}>
+            Nullstill
+          </Button> }
+        </Stack>
+      </LocalizationProvider>
+    </Container>
   );
 }

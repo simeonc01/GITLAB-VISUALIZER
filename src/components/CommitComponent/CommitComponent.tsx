@@ -24,7 +24,6 @@ export default function CommitComponent() {
 
   useEffect(() => {
     const tempCommits = context.commits;
-    console.log(tempCommits);
     if (tempCommits !== null) setCommits(tempCommits);
   }, [context.commits]);
 

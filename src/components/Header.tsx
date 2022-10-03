@@ -56,9 +56,7 @@ export default function Header(props: Props) {
   const context = useContext(GitLabContext);
 
   useEffect(() => {
-    console.log("we in the loading effect?=")
     if (context.loading === false) {
-      console.log("we done loading")
       const p = context.currentProject;
       if (p !== null) {
         setCurrentProject(p);
@@ -75,7 +73,6 @@ export default function Header(props: Props) {
   // Open or close project adding.
   const click = () => {
     setOpenProject(!openProject);
-    console.log(context.currentProject !== null)
   };
 
 
@@ -92,7 +89,6 @@ export default function Header(props: Props) {
     localStorage.setItem("token", tokenID);
     localStorage.setItem("projectName", url);
     context.update();
-    console.log(context.error)
     if (!context.error) {
       setErrorMessage(false);
       click();

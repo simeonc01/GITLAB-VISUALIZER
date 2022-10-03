@@ -2,9 +2,9 @@ import { Box, CircularProgress, Divider, Tooltip, Typography } from '@mui/materi
 import React, { useContext, useEffect, useState } from 'react';
 import { IContextDefault, Label, Project } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
+import Container from './LayoutContainer';
 
 const LabelComponent = (props: {label: Label}) => {
-    console.log(props.label.description)
     if (props.label.description !== null && props.label.description !== "") {
         return (
             <Tooltip title={props.label.description} placement="bottom">
@@ -69,7 +69,7 @@ const InfoBox = (props: {project: Project, labels: Label[]}) => {
     )
 }
 
-const ProjectInfo = (props?: any) => {
+const ProjectInfo = () => {
 
     const context = useContext<IContextDefault>(GitLabContext);
 
@@ -89,20 +89,12 @@ const ProjectInfo = (props?: any) => {
     }, [context.loading]);
 
     return (
-        <Box sx={{
-            minWidth: 300,
-            backgroundColor: 'background.paper',
-            boxShadow: 1,
-            borderRadius: 2,
-            width: 'fit-content',
-            padding: 2
-        }}>
+        <Container>
             {context.loading && <CircularProgress />}
-            {error && <></>}
             {!context.loading && !error && project !== undefined && labels.length !== 0 &&
                 <InfoBox project={project} labels={labels}/>
             }
-        </Box>
+        </Container>
     )
 }
 

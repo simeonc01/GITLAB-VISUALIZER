@@ -72,7 +72,6 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         setError(false);
         const token = localStorage.getItem("token");
         const projectName = localStorage.getItem("projectName");
-        console.log(token, projectName);    
         if (token === null || projectName === null) {
             setError(true);
             return;
