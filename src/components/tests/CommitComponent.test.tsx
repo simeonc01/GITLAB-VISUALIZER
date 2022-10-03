@@ -42,3 +42,5 @@
 //     const comp = renderer.create(<CommitTable rows ={testData} />).toJSON();
 //     expect(comp).toMatchSnapshot();
 //   });
+
+export {}
