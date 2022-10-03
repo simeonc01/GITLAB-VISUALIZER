@@ -2,16 +2,18 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
 import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType } from '../util/types';
 
-
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
     const [filter, setFilter] = useState<FilterType>({startDate: null, endDate: null});
     const [commits, setCommits] = useState<Commit[]>([]);
+    const [filterCommits, setFilterCommits] = useState<Commit[]>([]);
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
+    const [filterIssues, setFilterIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
     const [events, setEvents] = useState<Event[]>([]);
+    const [filterEvents, setFilterEvents] = useState<Event[]>([]);
     const [labels, setLabels] = useState<Label[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -20,7 +22,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getCommits = (): Commit[] | null => {
         if (error) return null;
-        return commits;
+        return filterCommits;
     }
 
     const getBranches = (): Branch[] | null => {
@@ -30,7 +32,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getIssues = (): Issue[] | null => {
         if (error) return null;
-        return issues;
+        return filterIssues;
     }
 
     const getCurrentProject = (): Project | null => {
@@ -40,7 +42,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getEvents = (): Event[] | null => {
         if (error) return null;
-        return events;
+        return filterEvents;
     }
     
     const getLabels = (): Label[] | null => {
@@ -79,8 +81,19 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     }
 
     useEffect(() => {
-        console.log(filter);
-    }, [filter]);
+        const filterFunc = (elem: Commit | Issue | Event): boolean => {
+            if (filter.startDate === null && filter.endDate !== null) return new Date(elem.created_at) < filter.endDate;
+            if (filter.startDate !== null && filter.endDate === null) return new Date(elem.created_at) > filter.startDate;
+            const d = new Date(elem.created_at);
+            if (filter.startDate !== null && filter.endDate !== null) return d > filter.startDate && d < filter.endDate;
+            return true;
+        }
+
+        console.log(commits.filter(filterFunc));
+        setFilterCommits(commits);
+        setFilterIssues(issues);
+        setFilterEvents(events);
+    }, [filter, commits, issues, events]);
 
     useEffect(() => {
         update();
