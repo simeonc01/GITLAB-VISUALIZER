@@ -7,9 +7,11 @@ import {
   YAxis,
   Area,
   Tooltip,
+  ResponsiveContainer,
 } from "recharts";
 import { GitLabContext } from "./GitlabProvider";
 import Container from "./LayoutContainer";
+import { Box, Typography } from "@mui/material";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -281,9 +283,16 @@ function IssuesComponent() {
 
   return (
     <Container>
-      <div style={{ display: "grid", gridTemplateColumns: "500px 150px" }}>
-        <div>
-          <h3 style={{ textAlign: "center" }}>Active issues over time</h3>
+      <Typography variant="h5">Active issues</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ResponsiveContainer width="100%" height={250}>
           <AreaChart width={500} height={250} data={graphData}>
             <defs>
               <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -303,12 +312,14 @@ function IssuesComponent() {
               fill="url(#colorUv)"
             />
           </AreaChart>
-        </div>
-        <div
-          style={{
-            textAlign: "center",
-            paddingTop: "50px",
-            paddingLeft: "10px",
+        </ResponsiveContainer>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            ml: 1,
           }}
         >
           <p>Total issues:</p>
@@ -316,8 +327,8 @@ function IssuesComponent() {
           <p>Total closed issues:</p>
           <h3>{countAllClosed()}</h3>
           <p>The last issue was created by {lastAuthor()}</p>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Container>
   );
 }
