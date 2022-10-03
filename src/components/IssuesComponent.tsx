@@ -87,7 +87,7 @@ function IssuesComponent() {
   }
 
   function lastAuthor(): string {
-    const authors: string[] = issues.map((issue) => issue.author.username);
+    const authors: string[] = issues.map((issue) => issue.author.name);
     return authors && authors[0];
   }
 
@@ -292,8 +292,16 @@ function IssuesComponent() {
           alignItems: "center",
         }}
       >
+        <Box
+            sx={{
+              width: ["400px", "600px"],
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
         <ResponsiveContainer width="100%" height={250}>
-          <AreaChart width={500} height={250} data={graphData}>
+          <AreaChart data={graphData}>
             <defs>
               <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
@@ -313,6 +321,7 @@ function IssuesComponent() {
             />
           </AreaChart>
         </ResponsiveContainer>
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -322,11 +331,16 @@ function IssuesComponent() {
             ml: 1,
           }}
         >
-          <p>Total issues:</p>
-          <h3>{myData.length}</h3>
-          <p>Total closed issues:</p>
-          <h3>{countAllClosed()}</h3>
-          <p>The last issue was created by {lastAuthor()}</p>
+          <Typography variant="h6">
+          Total issues: {myData.length}
+            </Typography>
+            <Typography variant="h6">
+            Total closed issues: {countAllClosed()}
+            </Typography>
+            <Typography variant="h6">
+              The last issue was created by: {lastAuthor()}
+            </Typography>
+         
         </Box>
       </Box>
     </Container>
