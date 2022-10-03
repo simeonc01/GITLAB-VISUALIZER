@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Label, Project } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label } from '../util/types';
 
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
@@ -10,6 +10,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const [branches, setBranches] = useState<Branch[]>([]);
     const [issues, setIssues] = useState<Issue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
+    const [events, setEvents] = useState<Event[]>([]);
     const [labels, setLabels] = useState<Label[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -36,6 +37,11 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         return currentProject;
     }
 
+    const getEvents = (): Event[] | null => {
+        if (error) return null;
+        return events;
+    }
+    
     const getLabels = (): Label[] | null => {
         if (error) return null;
         return labels;
@@ -48,6 +54,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             setBranches(data.branches);
             setIssues(data.issues);
             setCurrentProject(data.currentProject);
+            setEvents(data.events);
             setLabels(data.labels);
             setLoading(false);
         }).catch((err: GitlabError) => {
@@ -83,8 +90,9 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             commits: getCommits(),
             branches: getBranches(), 
             issues: getIssues(), 
+            currentProject: getCurrentProject(),
+            events: getEvents(),
             labels: getLabels(),
-            currentProject: getCurrentProject(), 
             error,
             loading,
             update

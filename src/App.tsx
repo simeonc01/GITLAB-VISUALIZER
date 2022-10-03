@@ -1,8 +1,10 @@
+import "./App.css";
+import GitlabProvider from "./components/GitlabProvider";
+import Header from "./components/Header";
+import Activity from "./components/Activity";
 import React from 'react';
 import './App.css';
-import GitlabProvider from './components/GitlabProvider';
 import { ApiHandler } from './util/api';
-import Header from './components/Header'
 import GraphExample from './components/GraphExample';
 import Filter from './components/Filter'
 import CommitComponent from "./components/CommitComponent/CommitComponent";
@@ -67,9 +69,11 @@ function App() {
     }
   ]
 
+
   return (
     <GitlabProvider>
       <Header/>
+      <Activity/>
       <br/>
       <Filter/>
       <br/>

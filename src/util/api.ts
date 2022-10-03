@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import { Branch, Commit, Issue, Label, Project, UpdateData } from './types';
+import { Branch, Commit, Issue, Project, UpdateData, Event, Label } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
     return new Promise<T>((resolve, reject) => {
@@ -34,6 +34,7 @@ export class ApiHandler {
             baseURL: `https://gitlab.stud.idi.ntnu.no/api/v4`,
             timeout: 3000
         });
+        this.handler.defaults.headers.common["PRIVATE-TOKEN"] = token;
     }
 
     public async update(): Promise<UpdateData> {
@@ -43,6 +44,7 @@ export class ApiHandler {
                 this.getBranches(),
                 this.getIssues(),
                 this.getCurrentProject(),
+                this.getEvents(),
                 this.getLabels()
             ]).then(data => {
                 resolve({
@@ -50,7 +52,8 @@ export class ApiHandler {
                     branches: data[1],
                     issues: data[2],
                     currentProject: data[3],
-                    labels: data[4]
+                    events: data[4],
+                    labels: data[5]
                 });
             }).catch(error => {
                 reject({
@@ -151,6 +154,19 @@ export class ApiHandler {
         );
     }
 
+    public async getEvents(): Promise<Event[]> {
+        if (this.id < 0)
+            return Promise.reject<Event[]>({
+                message: "Project ID was not set", 
+                data: null
+            });
+
+        return wrapPromise<Event[]>(
+            this.handler.get<Event[]>(`/projects/${this.id}/events?per_page=100`, {
+                validateStatus: (code: number) => code === 200
+            })
+        )
+    }   
     public async getLabels(): Promise<Label[]> {
         if (this.id < 0)
             return Promise.reject<Label[]>({
