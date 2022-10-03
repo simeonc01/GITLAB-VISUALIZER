@@ -96,7 +96,7 @@ export type Issue = {
 
 export type Project = {
     _links: object;
-    allow_merge_on_skipped_pipeline: any;
+    allow_merge_on_skipped_pipeline: unknown;
     analytics_access_level: string;
     archived: boolean;
     auto_cancel_pending_pipelines: string;
@@ -118,7 +118,7 @@ export type Project = {
     container_registry_access_level: string;
     container_registry_enabled: boolean;
     container_registry_image_prefix: string;
-    created_at: Date;
+    created_at: string;
     creator_id: number;
     default_branch: string;
     description: string | null;
@@ -135,7 +135,7 @@ export type Project = {
     issues_enabled: string;
     jobs_enabled: string;
     keep_latest_artifact: string;
-    last_activity_at: Date;
+    last_activity_at: string;
     lfs_enabled: boolean;
     merge_commit_template: string | null;
     merge_method: string;
@@ -183,12 +183,44 @@ export type Project = {
     wiki_enabled: boolean;
 }
 
+
+export type Event = {
+    id: number;
+    title: string | null;
+    project_id: number;
+    action_name: string;
+    target_id: number;
+    target_type: string;
+    author_id: number;
+    target_title: string;
+    created_at: string;
+    author: Author;
+    author_username: string;
+}
+
+export type Label = {
+    id: number;
+    name: string;
+    color: string;
+    text_color: string;
+    description: string;
+    description_html: string;
+    open_issue_count: number;
+    closed_issues_count: number;
+    open_merge_requests_count: number;
+    subscribed: boolean;
+    priority: string | null;
+    is_project_label: boolean;
+}
+
 // other types
 export interface IContextDefault {
     commits: BetterCommit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
+    labels: Label[] | null;
     currentProject: Project | null;
+    events: Event[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
@@ -199,6 +231,8 @@ export type UpdateData = {
     branches: Branch[];
     issues: Issue[];
     currentProject: Project;
+    events: Event[];
+    labels: Label[];
 }
 
 export type GitlabError = {
