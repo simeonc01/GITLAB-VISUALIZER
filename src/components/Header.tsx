@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -17,6 +18,7 @@ import Modal from '@mui/material/Modal';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TextField from "@mui/material/TextField";
 import { GitLabContext } from './GitlabProvider';
+import { Project } from '../util/types';
 
 interface Props {
   window?: () => Window;
@@ -44,38 +46,58 @@ export default function Header(props: Props) {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const [project, setProject] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openProject, setOpenProject] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Project>({} as Project);
 
   const [url, setUrl] = useState<string>("");
   const [tokenID, setTokenID] = useState<string>("");
 
   const context = useContext(GitLabContext);
 
-  /**
-   * Do a check if there is a project in the local storage.
-   * If so, set the variabel project true. 
-   * If not, let it remain false.
-   */
-
+  useEffect(() => {
+    if (context.loading === false) {
+      const p = context.currentProject;
+      if (p !== null) {
+        setCurrentProject(p);
+        setProject(true);
+      }
+    }
+  }, [context.loading])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+
+  // Open or close project adding.
   const click = () => {
-    setOpen(!open);
+    setOpenProject(!openProject);
   };
 
+
+
   const clearProject = () => {
-    setProject(false)
+    setProject(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("projectName");
   };
+
+
 
   const updateProject = () => {
     localStorage.setItem("token", tokenID);
     localStorage.setItem("projectName", url);
     context.update();
-    click();
-    setProject(true);
+    if (!context.error) {
+      setErrorMessage(false);
+      click();
+      setProject(true);
+    }
+    else {
+      setErrorMessage(true)
+    }
+    
   }
 
   const drawer = (
@@ -94,7 +116,7 @@ export default function Header(props: Props) {
           </ListItem> :
           <ListItem key={"Prosjekt Navn"} disablePadding >
             <ListItemButton sx={{ textAlign: 'center'}}>
-              <ListItemText primary={"Prosjekt Navn"}/>
+              <ListItemText primary={!context.loading ? currentProject.name : "error"}/>
             </ListItemButton>
           </ListItem> 
           }
@@ -108,21 +130,21 @@ export default function Header(props: Props) {
   return (
     <div>
       <Modal
-        open={open}
+        open={openProject}
         onClose={click}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >{project?
         <Box sx={{ ...style }}>
           <ArrowBackIcon onClick={click}/>
-          <h2 style={{textAlign: "center"}}>Prosjekt Navn</h2>
+          <h2 style={{textAlign: "center"}}>{!context.loading ? currentProject.name : ""}</h2>
           <p>
             URL: {localStorage.getItem("projectName")}
           </p>
           <p>
             Token id: {localStorage.getItem("token")}
           </p>
-          <h5 style={{color:"#0047AB"}} onClick={clearProject}>
+          <h5 style={{color:"#0047AB", textAlign:"center"}} onClick={clearProject}>
             Nytt prosjekt?
           </h5>
         </Box> 
@@ -157,7 +179,9 @@ export default function Header(props: Props) {
               value={tokenID}
               onInput={(event: React.ChangeEvent<HTMLInputElement>) => setTokenID(event.target.value) }
             />
-            <br/><br/>
+            <br/>
+            {errorMessage && <Alert severity="error">URL og/eller Token ID er feil. Prøv igjen!</Alert>}
+            <br/>
             <Button
               type="submit"
               fullWidth
@@ -201,7 +225,7 @@ export default function Header(props: Props) {
                 </Button> 
                 :
                 <Button onClick={click}  sx={{ color: '#fff' }}> 
-                {context.currentProject !== null ? context.currentProject.name : "error"}
+                {!context.loading ? currentProject.name : ""}
                 </Button>
                 }
               </div>
