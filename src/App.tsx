@@ -6,6 +6,7 @@ import ProjectInfo from "./components/ProjectInfo";
 import "./App.css";
 import { Grid } from "@mui/material";
 import CommitComponent from "./components/CommitComponent";
+import IssuesComponent from "./components/IssuesComponent";
 
 function App() {
   // test token = glpat-B9TXUoQw83CPzkAxQuNF
@@ -26,10 +27,11 @@ function App() {
       <div>
         <h1>Hello world</h1>
         <Grid container columnSpacing={2} rowSpacing={1}>
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={12}>
             <CommitComponent />
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={12}>
+            <IssuesComponent/>
           </Grid>
         </Grid>
       </div>
