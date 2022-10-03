@@ -86,7 +86,7 @@ function App() {
           <div className="commitComponent">
             <Paper
               elevation={20}
-              sx={{ width: "100%", overflow: "hidden", borderRadius: "15px"}}
+              sx={{ width: "100%", overflow: "hidden", borderRadius: "15px" }}
             >
               <CommitComponent />
             </Paper>
