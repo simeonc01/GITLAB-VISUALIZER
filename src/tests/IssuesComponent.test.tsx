@@ -19,8 +19,3 @@ test("dateOpened is of type date", () => {});
 
 //Enheten skal også testes
 test("It renders Still Open when issue is not closed", () => {});
-
-test("It renders without crashing", async () => {
-  render(<IssuesComponent />);
-  //expect(await screen.findByText(/vwnorris/)).toBeInTheDocument();
-});
