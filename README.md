@@ -15,9 +15,7 @@ Gruppen har benyttet både local- og sessionstorage som gitt i kravbeskrivelsen.
 
 
 ## MUI bibliotek
-I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig MUI. Årsaken til at vi valgte dette biblioteket er at vi har 
-
-(Nevn at vi også har brukt egne React komponenter - vis eksmepel)
+I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig MUI. Årsaken til at vi valgte nettopp dette biblioteket er at det innehar rikelige UI-komponenter som kan benyttes i react-applikasjonen vår. I tillegg har vi en oppfatning av at MUI blir mye brukt ute i utviklerbransjen, slik at det kan være nyttig for oss å bli kjent med dette biblioteket allerede her. Underveis har vi også tatt i bruke egne React-komponenter i prosjektet. 
 
 
 
@@ -33,6 +31,7 @@ I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig 
 ## Diverse
 ...
 (Kan ta opp det som ikke dekkes i de andre overskriftene)
+
 
 
 ### Link til Figma:
