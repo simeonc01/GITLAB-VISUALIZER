@@ -1,17 +1,19 @@
 import { useContext, useEffect, useState } from "react";
-import "./CommitComponent.css";
-import { BetterCommit, Commit } from "../util/types";
+import { BetterCommit } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Legend,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import Typography from "@mui/material/Typography";
+import Container from "./LayoutContainer";
+import { Box } from "@mui/material";
 
 interface IVisualData {
   author: string;
@@ -63,41 +65,63 @@ export default function CommitComponent() {
 
   if (commits.length !== 0)
     return (
-      <div className="row">
-        <div className="column">
-          <Typography variant="h6" sx={{ my: 2, ml: 5 }}>
-            Commits
-          </Typography>
-          <BarChart
-            width={500}
-            height={250}
-            data={visualData}
-            barCategoryGap={"30%"}
+      <Container>
+        <Typography variant="h5">Commits</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: ["400px", "600px"],
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="author" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar
-              name="Number of Commits"
-              dataKey="numberOfCommits"
-              fill="#8884d8"
-            />
-          </BarChart>
-        </div>
-        <div className="column">
-          <Typography variant="h6" sx={{ mt: 8, ml: 3 }}>
-            Number of commits: {commits.length}
-          </Typography>
-          <Typography variant="h6" sx={{ my: 1, ml: 3 }}>
-            Last commit by: {commits[0].author_name}
-          </Typography>
-          <Typography variant="h6" sx={{ my: 1, ml: 3 }}>
-            Date of last commit: {commits[0].created_at_date.getDate() + "/" + (commits[0].created_at_date.getMonth()+1)}
-          </Typography>
-        </div>
-      </div>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={visualData} barCategoryGap={"30%"}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="author" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  name="Number of Commits"
+                  dataKey="numberOfCommits"
+                  fill="#8884d8"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </Box>
+          <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            ml: 1
+          }}
+        >
+            <Typography variant="h6">
+              Number of commits: {commits.length}
+            </Typography>
+            <Typography variant="h6">
+              Last commit by: {commits[0].author_name}
+            </Typography>
+            <Typography variant="h6">
+              Date of last commit:{" "}
+              {commits[0].created_at_date.getDate() +
+                "/" +
+                (commits[0].created_at_date.getMonth() + 1)}
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
     );
 
   return <></>;

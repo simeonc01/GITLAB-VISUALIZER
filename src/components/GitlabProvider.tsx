@@ -6,6 +6,7 @@ import {
   GitlabError,
   IContextDefault,
   Issue,
+  Event,
   Project,
   BetterCommit,
   Label,
