@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Issue } from "../util/types";
+import { Commit } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
@@ -15,40 +15,36 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-function IssuesComponent() {
-  const [issues, setIssues] = useState<Issue[]>([]);
+export default function CommitComponent() {
+  const [commits, setCommits] = useState<Commit[]>([]);
 
   const context = useContext(GitLabContext);
 
   useEffect(() => {
-    const tempIssues = context.issues;
-    if (tempIssues !== null) setIssues(tempIssues);
-  }, [context.issues]);
+    const tempCommits = context.commits;
+    if (tempCommits !== null) setCommits(tempCommits);
+  }, [context.commits]);
 
   function createData(
     title: string,
-    assignee: string,
-    created: Date,
-    closed: Date | null,
-    description: string
+    author: string,
+    commited_date: string,
+    message: string
   ) {
     return {
-      title,
-      assignee,
-      created,
-      closed,
-      description,
+      title: title,
+      author: author,
+      commited_date: commited_date,
+      message: message,
     };
   }
 
-  const rows: ReturnType<typeof createData>[] = issues?.map((issue) => {
-    return createData(
-      issue.title,
-      issue.author.username,
-      issue.created_at,
-      issue.closed_at,
-      issue.description
-    );
+  const rows: ReturnType<typeof createData>[] = commits.map((commit) => {
+    const yyyymmdd = commit.committed_date
+      .substring(0, commit.committed_date.indexOf("T"))
+      .split("-");
+    const date = yyyymmdd[2] + "/" + yyyymmdd[1];
+    return createData(commit.title, commit.author_name, date, commit.message);
   });
 
   function Row(props: { row: ReturnType<typeof createData> }) {
@@ -70,28 +66,19 @@ function IssuesComponent() {
           <TableCell component="th" scope="row">
             {row.title}
           </TableCell>
-          <TableCell>{row.assignee}</TableCell>
-          <TableCell>{row.created.toString().slice(0, 10)}</TableCell>
-          <TableCell align="right" data-testid="dateOpened">
-            {row.closed !== null
-              ? row.closed.toString().slice(0, 10)
-              : "Still open"}
-          </TableCell>
+          <TableCell>{row.author}</TableCell>
+          <TableCell align="right">{row.commited_date}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Description
+              <Box sx={{ margin: 1, ml: 2 }}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Message:
                 </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>{row.description}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                <Typography variant="body2" gutterBottom>
+                  {row.message}
+                </Typography>
               </Box>
             </Collapse>
           </TableCell>
@@ -102,21 +89,22 @@ function IssuesComponent() {
 
   return (
     <div>
-      <h1>Issues</h1>
-      <TableContainer component={Paper}>
-        <Table aria-label="Issues-table">
+      <Typography variant="h6" sx={{ my: 2, ml: 10 }}>
+        Commit log
+      </Typography>
+      <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
+        <Table stickyHeader aria-label="Commits-table">
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Issue</TableCell>
+              <TableCell>Title</TableCell>
               <TableCell>Author</TableCell>
-              <TableCell>Date created</TableCell>
-              <TableCell align="right">Date closed</TableCell>
+              <TableCell align="right">Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows?.map((row) => (
-              <Row key={row.title} row={row} />
+            {rows.map((row) => (
+              <Row key={row.title + row.author} row={row} />
             ))}
           </TableBody>
         </Table>
@@ -124,5 +112,3 @@ function IssuesComponent() {
     </div>
   );
 }
-
-export default IssuesComponent;
