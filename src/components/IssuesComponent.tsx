@@ -51,6 +51,7 @@ function IssuesComponent() {
     let active = 0;
     myData.filter((issue) => {
       const thisDate = new Date(issue.created);
+      thisDate.setHours(0, 0, 0, 0);
 
       if (+thisDate < +now) {
         if (issue.closed === null || new Date(issue.closed) > now) {
