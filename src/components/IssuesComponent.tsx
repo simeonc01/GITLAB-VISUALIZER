@@ -18,7 +18,6 @@ function IssuesComponent() {
   useEffect(() => {
     const tempIssues = context.issues;
     if (tempIssues !== null) setIssues(tempIssues);
-    console.log(tempIssues);
   }, [context.issues]);
 
   function createData(
@@ -82,6 +81,11 @@ function IssuesComponent() {
       }
     });
     return closed;
+  }
+
+  function lastAuthor(): string {
+    const authors: string[] = issues.map((issue) => issue.author.username);
+    return authors && authors[0];
   }
 
   const graphData = [
@@ -305,6 +309,7 @@ function IssuesComponent() {
         <h3>{myData.length}</h3>
         <p>Total closed issues:</p>
         <h3>{countAllClosed()}</h3>
+        <p>The last issue was created by {lastAuthor()}</p>
       </div>
     </div>
   );
