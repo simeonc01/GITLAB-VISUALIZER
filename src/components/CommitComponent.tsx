@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import Typography from "@mui/material/Typography";
 import Container from "./LayoutContainer";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 interface IVisualData {
   author: string;
@@ -138,5 +138,20 @@ export default function CommitComponent() {
       </Container>
     );
 
-  return <></>;
+  return (
+    <Container>
+      <Typography variant="h5">Commits</Typography>
+      <Box
+            sx={{
+              width: ["300px", "400px", "600px"],
+              height: "250px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress/>
+          </Box>
+    </Container>
+  );
 }
