@@ -72,214 +72,54 @@ function IssuesComponent() {
     return closed;
   }
 
-  function countClosed(now: Date) {
-    let closed = 0;
-    myData.filter((issue) => {
-      const thisDate = new Date(issue.created);
-
-      if (+thisDate < +now) {
-        if (issue.closed !== null) {
-          closed++;
-        }
-      }
-    });
-    return closed;
-  }
-
   function lastAuthor(): string {
     const authors: string[] = issues.map((issue) => issue.author.name);
     return authors && authors[0];
   }
 
-  const graphData = [
-    {
-      date: "12.09",
-      issues: countActive(new Date(2022, 8, 12)),
-    },
-    {
-      date: "13.09",
-      issues: countActive(new Date(2022, 8, 13)),
-    },
-    {
-      date: "14.09",
-      issues: countActive(new Date(2022, 8, 14)),
-    },
-    {
-      date: "15.09",
-      issues: countActive(new Date(2022, 8, 15)),
-    },
-    {
-      date: "16.09",
-      issues: countActive(new Date(2022, 8, 16)),
-    },
-    {
-      date: "17.09",
-      issues: countActive(new Date(2022, 8, 17)),
-    },
-    {
-      date: "18.09",
-      issues: countActive(new Date(2022, 8, 18)),
-    },
-    {
-      date: "19.09",
-      issues: countActive(new Date(2022, 8, 19)),
-    },
-    {
-      date: "20.09",
-      issues: countActive(new Date(2022, 8, 20)),
-    },
-    {
-      date: "21.09",
-      issues: countActive(new Date(2022, 8, 21)),
-    },
-    {
-      date: "22.09",
-      issues: countActive(new Date(2022, 8, 22)),
-    },
-    {
-      date: "23.09",
-      issues: countActive(new Date(2022, 8, 23)),
-    },
-    {
-      date: "24.09",
-      issues: countActive(new Date(2022, 8, 24)),
-    },
-    {
-      date: "25.09",
-      issues: countActive(new Date(2022, 8, 25)),
-    },
-    {
-      date: "26.09",
-      issues: countActive(new Date(2022, 8, 26)),
-    },
-    {
-      date: "27.09",
-      issues: countActive(new Date(2022, 8, 27)),
-    },
-    {
-      date: "28.09",
-      issues: countActive(new Date(2022, 8, 28)),
-    },
-    {
-      date: "29.09",
-      issues: countActive(new Date(2022, 8, 29)),
-    },
-    {
-      date: "30.09",
-      issues: countActive(new Date(2022, 8, 30)),
-    },
-    {
-      date: "01.10",
-      issues: countActive(new Date(2022, 9, 1)),
-    },
-    {
-      date: "02.10",
-      issues: countActive(new Date(2022, 9, 2)),
-    },
-    {
-      date: "03.10",
-      issues: countActive(new Date(2022, 9, 3)),
-    },
-    {
-      date: "04.10",
-      issues: countActive(new Date(2022, 9, 4)),
-    },
-  ];
+  //   Date.prototype.addDays = function(days) {
+  //     let date = new Date(this.valueOf());
+  //     date.setDate(date.getDate() + days);
+  //     return date;
+  // }
 
-  const graphClosedData = [
-    {
-      date: "12.09",
-      issues: countClosed(new Date(2022, 8, 12)),
-    },
-    {
-      date: "13.09",
-      issues: countClosed(new Date(2022, 8, 13)),
-    },
-    {
-      date: "14.09",
-      issues: countClosed(new Date(2022, 8, 14)),
-    },
-    {
-      date: "15.09",
-      issues: countClosed(new Date(2022, 8, 15)),
-    },
-    {
-      date: "16.09",
-      issues: countClosed(new Date(2022, 8, 16)),
-    },
-    {
-      date: "17.09",
-      issues: countClosed(new Date(2022, 8, 17)),
-    },
-    {
-      date: "18.09",
-      issues: countClosed(new Date(2022, 8, 18)),
-    },
-    {
-      date: "19.09",
-      issues: countClosed(new Date(2022, 8, 19)),
-    },
-    {
-      date: "20.09",
-      issues: countClosed(new Date(2022, 8, 20)),
-    },
-    {
-      date: "21.09",
-      issues: countClosed(new Date(2022, 8, 21)),
-    },
-    {
-      date: "22.09",
-      issues: countClosed(new Date(2022, 8, 22)),
-    },
-    {
-      date: "23.09",
-      issues: countClosed(new Date(2022, 8, 23)),
-    },
-    {
-      date: "24.09",
-      issues: countClosed(new Date(2022, 8, 24)),
-    },
-    {
-      date: "25.09",
-      issues: countClosed(new Date(2022, 8, 25)),
-    },
-    {
-      date: "26.09",
-      issues: countClosed(new Date(2022, 8, 26)),
-    },
-    {
-      date: "27.09",
-      issues: countClosed(new Date(2022, 8, 27)),
-    },
-    {
-      date: "28.09",
-      issues: countClosed(new Date(2022, 8, 28)),
-    },
-    {
-      date: "29.09",
-      issues: countClosed(new Date(2022, 8, 29)),
-    },
-    {
-      date: "30.09",
-      issues: countClosed(new Date(2022, 8, 30)),
-    },
-    {
-      date: "01.10",
-      issues: countClosed(new Date(2022, 9, 1)),
-    },
-    {
-      date: "02.10",
-      issues: countClosed(new Date(2022, 9, 2)),
-    },
-    {
-      date: "03.10",
-      issues: countClosed(new Date(2022, 9, 3)),
-    },
-    {
-      date: "04.10",
-      issues: countClosed(new Date(2022, 9, 4)),
-    },
-  ];
+  function getDates(startDate: Date, stopDate: Date) {
+    const dateArray: Date[] = [];
+    let currentDate = startDate;
+    while (currentDate <= stopDate) {
+      dateArray.push(new Date(currentDate));
+      const tempDate = new Date(currentDate.valueOf());
+      tempDate.setDate(tempDate.getDate() + 1);
+      currentDate = tempDate;
+    }
+    return dateArray;
+  }
+
+  function getGraphData() {
+    const graphData: { date: string; issues: number }[] = [];
+    const dates = issues.sort((a, b) => {
+      if (a.created_at < b.created_at) return 1;
+      return -1;
+    });
+    if (dates.length > 0) {
+      const maxDate = new Date(dates[0].created_at.toString());
+      const minDate = new Date(dates[dates.length - 1].created_at.toString());
+      const allDates = getDates(minDate, maxDate);
+
+      allDates.forEach((date) => {
+        graphData.push({
+          date: date.getDate() + "." + (date.getMonth() + 1),
+          issues: countActive(
+            new Date(date.getFullYear(), date.getMonth(), date.getDate())
+          ),
+        });
+      });
+
+      return graphData;
+    }
+
+    return [];
+  }
 
   if (!context.loading)
     return (
@@ -302,7 +142,7 @@ function IssuesComponent() {
             }}
           >
             <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={graphData}>
+              <AreaChart data={getGraphData()}>
                 <defs>
                   <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
