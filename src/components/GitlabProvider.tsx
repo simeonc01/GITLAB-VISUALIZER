@@ -20,6 +20,8 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
   const [labels, setLabels] = useState<Label[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [instanciated, setInstanciated] = useState<boolean>(false);
+
 
   const apiHandler = new ApiHandler("", "");
 
@@ -142,6 +144,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
         const success = await apiHandler.updateDetails(token, projectName);
         if (!error && success) {
+            setInstanciated(true);
             updateData();
         } else
             console.error("Context is not setup correctly, need a valid Token and projectName")
@@ -159,6 +162,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             error,
             loading,
             update,
+            instanciated,
             setFilter: setDateFilter
         }}>
             {props.children}
