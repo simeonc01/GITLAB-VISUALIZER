@@ -224,6 +224,7 @@ export interface IContextDefault {
     error: boolean;
     loading: boolean;
     update: () => void;
+    setFilter: (startDate: Date, endDate: Date) => void;
 }
 
 export type UpdateData = {

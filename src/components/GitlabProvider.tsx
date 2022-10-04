@@ -80,6 +80,10 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         }
     }
 
+    const setDateFilter = (startDate: Date, endDate: Date) => {
+        console.log()
+    }
+
     useEffect(() => {
         const filterFunc = (elem: Commit | Issue | Event): boolean => {
             if (filter.startDate === null && filter.endDate !== null) return new Date(elem.created_at) < filter.endDate;
@@ -89,7 +93,6 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             return true;
         }
 
-        console.log(commits.filter(filterFunc));
         setFilterCommits(commits);
         setFilterIssues(issues);
         setFilterEvents(events);
@@ -129,7 +132,8 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             labels: getLabels(),
             error,
             loading,
-            update
+            update,
+            setFilter: setDateFilter
         }}>
             {props.children}
         </GitLabContext.Provider>

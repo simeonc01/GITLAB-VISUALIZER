@@ -56,9 +56,7 @@ export default function Header(props: Props) {
   const context = useContext(GitLabContext);
 
   useEffect(() => {
-    console.log("we in the loading effect?=")
     if (context.loading === false) {
-      console.log("we done loading")
       const p = context.currentProject;
       if (p !== null) {
         setCurrentProject(p);
