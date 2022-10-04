@@ -221,6 +221,7 @@ export interface IContextDefault {
     labels: Label[] | null;
     currentProject: Project | null;
     events: Event[] | null;
+    milestones: Milestone[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
@@ -233,6 +234,7 @@ export type UpdateData = {
     currentProject: Project;
     events: Event[];
     labels: Label[];
+    milestones: Milestone[];
 }
 
 export type GitlabError = {
