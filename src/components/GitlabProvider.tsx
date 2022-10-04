@@ -66,11 +66,17 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const updateData = () => {
         setLoading(true);
         apiHandler.update().then(data => {
-            setCommits(data.commits.map(c => ({created_at_date: new Date(new Date(c.created_at).setHours(0,0,0,0)), ...c})));
+            const c = data.commits.map(c => ({created_at_date: new Date(new Date(c.created_at).setHours(0,0,0,0)), ...c}));
+            const i = data.issues.map(i => ({created_at_date: new Date(new Date(i.created_at).setHours(0,0,0,0)), ...i}));
+            const e = data.events.map(e => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e}));
+            setCommits(c);
+            setFilterCommits(c);
             setBranches(data.branches);
-            setIssues(data.issues.map(i => ({created_at_date: new Date(new Date(i.created_at).setHours(0,0,0,0)), ...i})));
+            setIssues(i);
+            setFilterIssues(i);
             setCurrentProject(data.currentProject);
-            setEvents(data.events.map(e => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
+            setEvents(e);
+            setFilterEvents(e);
             setLabels(data.labels);
             setMilestones(data.milestones);
             setLoading(false);

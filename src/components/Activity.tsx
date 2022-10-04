@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import React, { useContext, useEffect, useState } from 'react';
 import { Area, Bar, CartesianGrid, ComposedChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { countAmountPerDate, countAmoutPerAuthor, countAmoutPerType } from '../util/countHelper';
-import { BetterEvent, Event, KeyCount } from '../util/types';
+import { BetterEvent, KeyCount } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
 import Container from './LayoutContainer';
 
@@ -15,11 +15,7 @@ enum DataTypes {
 
 const DrawChart = (props: {data: BetterEvent[], type: DataTypes}) => {
     const [filteredData, setFilteredData] = useState<KeyCount[]>([]);
-
-    useEffect(() => {
-        console.log(props.data);
-    }, [])
-
+    
     useEffect(() => {
         if (props.data.length !== 0)
             if (props.type === DataTypes.Date)

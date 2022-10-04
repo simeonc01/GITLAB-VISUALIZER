@@ -9,8 +9,6 @@ import CommitComponent from "./components/CommitComponent";
 import IssuesComponent from "./components/IssuesComponent";
 
 function App() {
-  // test token = glpat-B9TXUoQw83CPzkAxQuNF
-
   return (
     <GitlabProvider>
       <Header />

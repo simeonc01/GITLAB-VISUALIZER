@@ -31,9 +31,6 @@ function wrapPromiseHeaderIncluded<T>(axios: AxiosPromise<T>) {
     })
 }
 
-
-
-
 export class ApiHandler {
     private readonly handler: AxiosInstance;
     private id = -1;
@@ -55,6 +52,7 @@ export class ApiHandler {
     }
 
     public async update(): Promise<UpdateData> {
+        console.log("update called");
         return new Promise<UpdateData>((resolve, reject) => {
             Promise.all([
                 this.getCommits(),
