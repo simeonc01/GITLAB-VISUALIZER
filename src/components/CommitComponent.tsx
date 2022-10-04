@@ -35,8 +35,11 @@ export default function CommitComponent() {
       });
       setCommits(tempCommits);
     }
+  }, [context.commits, context.loading]);
+
+  useEffect(() => {
     createVisualData();
-  }, [context.commits]);
+  }, [commits])
 
   const createVisualData = () => {
     const tempVisualData: IVisualData[] = [];
