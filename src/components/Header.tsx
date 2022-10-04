@@ -111,7 +111,7 @@ export default function Header(props: Props) {
             <ListItem key={"Legg til prosjekt"} disablePadding >
             <ListItemButton sx={{ textAlign: 'center'}}>
               <AddIcon/>
-              <ListItemText primary={"Legg til prosjekt"}/>
+              <ListItemText primary={"Add prosject"}/>
             </ListItemButton>
           </ListItem> :
           <ListItem key={"Prosjekt Navn"} disablePadding >
@@ -145,13 +145,13 @@ export default function Header(props: Props) {
             Token id: {localStorage.getItem("token")}
           </p>
           <h5 style={{color:"#0047AB", textAlign:"center"}} onClick={clearProject}>
-            Nytt prosjekt?
+            New project?
           </h5>
         </Box> 
         :
         <Box sx={{ ...style }}>
           <ArrowBackIcon onClick={click}/>
-          <h2 style={{textAlign: "center"}}>Legg til prosjekt</h2>
+          <h2 style={{textAlign: "center"}}>Add project</h2>
           <TextField
               variant="outlined"
               margin="normal"
@@ -189,7 +189,7 @@ export default function Header(props: Props) {
               color="primary"
               onClick={updateProject}
             >
-              Hent prosjekt
+              Load project
             </Button>
             <br/><br/>
         </Box>
@@ -221,7 +221,7 @@ export default function Header(props: Props) {
               <div>{!project ?
                 <Button onClick={click}  sx={{ color: '#fff' }}>
                   <AddIcon sx={{mr: 1}}/>
-                  Legg til prosjekt
+                  Add project
                 </Button> 
                 :
                 <Button onClick={click}  sx={{ color: '#fff' }}> 
