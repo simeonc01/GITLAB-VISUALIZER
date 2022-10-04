@@ -20,6 +20,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
   const [labels, setLabels] = useState<Label[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [projectLoads, setProjectLoads] = useState<number>(0);
 
   const apiHandler = new ApiHandler("", "");
 
@@ -49,7 +50,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
   };
 
   useEffect(() => {
-    update();
+    updateOutside();
   }, []);
 
     const getIssues = (): BetterIssue[] | null => {
@@ -132,19 +133,42 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     }, []);
 
     const update = async () => {
-        setError(false);
         const token = localStorage.getItem("token");
         const projectName = localStorage.getItem("projectName");
         if (token === null || projectName === null) {
-            setError(true);
             return;
+        } else {
+            const success = await apiHandler.updateDetails(token, projectName);
+            if (success) {
+                updateData();
+            } else {
+                setError(true);
+                console.error("Context could not update data correctly");
+                return
+            }
         }
+    }
 
-        const success = await apiHandler.updateDetails(token, projectName);
-        if (!error && success) {
-            updateData();
-        } else
-            console.error("Context is not setup correctly, need a valid Token and projectName")
+    const updateOutside = async () => {
+        setError(false);
+        setProjectLoads(projectLoads + 1);
+        const token = localStorage.getItem("token");
+        const projectName = localStorage.getItem("projectName");
+        if (token === null || projectName === null) {
+            if (projectLoads > 3)
+                setError(true);
+            return;
+        } else {
+            const success = await apiHandler.updateDetails(token, projectName);
+            if (success) {
+                updateData();
+                setProjectLoads(0);
+            } else {
+                setError(true);
+                console.error("Context could not update data correctly");
+                return
+            }
+        }
     }
 
     return (
@@ -158,7 +182,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             milestones: getMilestones(),
             error,
             loading,
-            update,
+            update: updateOutside,
             setFilter: setDateFilter
         }}>
             {props.children}

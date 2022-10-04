@@ -67,7 +67,6 @@ const Activity = () => {
     useEffect(() => {
         if (!context.loading) {
             if (context.events !== null) {
-                console.log(context.events);
                 setEvents(context.events);
             }
         }
