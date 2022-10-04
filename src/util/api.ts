@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import axios, { AxiosInstance, AxiosPromise, AxiosResponseHeaders } from 'axios';
 import { Branch, Commit, Issue, Project, UpdateData, Event, Label } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
@@ -16,6 +16,23 @@ function wrapPromise<T>(axios: AxiosPromise<T>) {
         });
     });
 }
+
+function wrapPromiseHeaderIncluded<T>(axios: AxiosPromise<T>) {
+    return new Promise<{data: T, headers: AxiosResponseHeaders}>((resolve, reject) => {
+        axios.then(d => {
+            resolve({data: d.data, headers: d.headers});
+        }).catch(async (error) => {
+            if (error.response) {
+                reject(error.response.data.message);
+            } else {
+                reject(error.message);
+            }
+        });
+    })
+}
+
+
+
 
 export class ApiHandler {
     private readonly handler: AxiosInstance;
@@ -126,6 +143,10 @@ export class ApiHandler {
         );
     }
 
+    
+
+
+
     public async getIssues(): Promise<Issue[]> {
         if (this.id < 0)
             return Promise.reject<Issue[]>({
@@ -161,12 +182,31 @@ export class ApiHandler {
                 data: null
             });
 
-        return wrapPromise<Event[]>(
-            this.handler.get<Event[]>(`/projects/${this.id}/events?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        )
+        try {
+            const data = await wrapPromiseHeaderIncluded<Event[]>(
+                this.handler.get<Event[]>(`/projects/${this.id}/events?per_page=100`, {
+                    validateStatus: (code: number) => code === 200
+                })
+            );
+    
+            for (let i = 1; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                const d = await wrapPromise(this.handler.get(`/projects/${this.id}/events?per_page=100&page=${i}`))
+                data.data.push(...d);
+                console.log(d.length);
+            }
+    
+            return Promise.resolve<Event[]>(data.data);
+        } catch (e) {
+            return Promise.reject<Event[]>({
+                message: e, 
+                data: null
+            });
+        }
     }   
+
+
+
+
     public async getLabels(): Promise<Label[]> {
         if (this.id < 0)
             return Promise.reject<Label[]>({
