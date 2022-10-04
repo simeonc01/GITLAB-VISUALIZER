@@ -73,7 +73,6 @@ export default function Header(props: Props) {
   // Open or close project adding.
   const click = () => {
     setOpenProject(!openProject);
-    console.log(context.currentProject !== null)
   };
 
 
@@ -90,7 +89,6 @@ export default function Header(props: Props) {
     localStorage.setItem("token", tokenID);
     localStorage.setItem("projectName", url);
     context.update();
-    console.log(context.error)
     if (!context.error) {
       setErrorMessage(false);
       click();

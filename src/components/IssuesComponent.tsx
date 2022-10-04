@@ -23,7 +23,6 @@ function IssuesComponent() {
   useEffect(() => {
     const tempIssues = context.issues;
     if (tempIssues !== null) setIssues(tempIssues);
-    console.log(tempIssues);
   }, [context.issues]);
 
   function createData(

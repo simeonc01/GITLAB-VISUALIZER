@@ -4,7 +4,6 @@ import { IContextDefault, Label, Project } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
 
 const LabelComponent = (props: {label: Label}) => {
-    console.log(props.label.description)
     if (props.label.description !== null && props.label.description !== "") {
         return (
             <Tooltip title={props.label.description} placement="bottom">

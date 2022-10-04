@@ -1,28 +1,29 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType } from '../util/types';
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType, BetterCommit, BetterIssue, BetterEvent } from '../util/types';
 
 export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
     const [filter, setFilter] = useState<FilterType>({startDate: null, endDate: null});
-    const [commits, setCommits] = useState<Commit[]>([]);
-    const [filterCommits, setFilterCommits] = useState<Commit[]>([]);
+    const [filterActive, setFilterActive] = useState<boolean>(false);
+    const [commits, setCommits] = useState<BetterCommit[]>([]);
+    const [filterCommits, setFilterCommits] = useState<BetterCommit[]>([]);
     const [branches, setBranches] = useState<Branch[]>([]);
-    const [issues, setIssues] = useState<Issue[]>([]);
-    const [filterIssues, setFilterIssues] = useState<Issue[]>([]);
+    const [issues, setIssues] = useState<BetterIssue[]>([]);
+    const [filterIssues, setFilterIssues] = useState<BetterIssue[]>([]);
     const [currentProject, setCurrentProject] = useState<Project>({} as Project);
-    const [events, setEvents] = useState<Event[]>([]);
-    const [filterEvents, setFilterEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<BetterEvent[]>([]);
+    const [filterEvents, setFilterEvents] = useState<BetterEvent[]>([]);
     const [labels, setLabels] = useState<Label[]>([]);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
 
     const apiHandler = new ApiHandler("", "");
 
-    const getCommits = (): Commit[] | null => {
+    const getCommits = (): BetterCommit[] | null => {
         if (error) return null;
-        return filterCommits;
+        return commits;
     }
 
     const getBranches = (): Branch[] | null => {
@@ -30,9 +31,9 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         return branches;
     }
 
-    const getIssues = (): Issue[] | null => {
+    const getIssues = (): BetterIssue[] | null => {
         if (error) return null;
-        return filterIssues;
+        return issues;
     }
 
     const getCurrentProject = (): Project | null => {
@@ -40,9 +41,9 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         return currentProject;
     }
 
-    const getEvents = (): Event[] | null => {
+    const getEvents = (): BetterEvent[] | null => {
         if (error) return null;
-        return filterEvents;
+        return events;
     }
     
     const getLabels = (): Label[] | null => {
@@ -53,11 +54,11 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
     const updateData = () => {
         setLoading(true);
         apiHandler.update().then(data => {
-            setCommits(data.commits);
+            setCommits(data.commits.map(c => ({created_at_date: new Date(new Date(c.created_at).setHours(0,0,0,0)), ...c})));
             setBranches(data.branches);
-            setIssues(data.issues);
+            setIssues(data.issues.map(i => ({created_at_date: new Date(new Date(i.created_at).setHours(0,0,0,0)), ...i})));
             setCurrentProject(data.currentProject);
-            setEvents(data.events);
+            setEvents(data.events.map(e => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
             setLabels(data.labels);
             setLoading(false);
         }).catch((err: GitlabError) => {
@@ -67,49 +68,35 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         });
     }
 
-    const listenSessionStorage = (event: StorageEvent): void => {
-        if (event.storageArea === sessionStorage) {
-            const f = {startDate: sessionStorage.getItem("startDate"), endDate: sessionStorage.getItem("endDate")};
-            const filter: FilterType = {
-                startDate: null,
-                endDate: null
-            };
-            filter.startDate = f.startDate !== null ? new Date(f.startDate) : null;
-            filter.endDate = f.endDate !== null ? new Date(f.endDate) : null;
-            setFilter(filter);
+    const setDateFilter = (startDate: Date | null, endDate: Date| null) => {
+        if (startDate !== null || endDate !== null) {
+            setFilterActive(true);
+            setFilter({startDate, endDate});
+        } else {
+            setFilterActive(false);
+            setFilter({startDate: null, endDate: null});
         }
-    }
-
-    const setDateFilter = (startDate: Date, endDate: Date) => {
-        console.log()
     }
 
     useEffect(() => {
-        const filterFunc = (elem: Commit | Issue | Event): boolean => {
-            if (filter.startDate === null && filter.endDate !== null) return new Date(elem.created_at) < filter.endDate;
-            if (filter.startDate !== null && filter.endDate === null) return new Date(elem.created_at) > filter.startDate;
-            const d = new Date(elem.created_at);
-            if (filter.startDate !== null && filter.endDate !== null) return d > filter.startDate && d < filter.endDate;
-            return true;
+        if (filterActive)
+            console.log("we are filtering")
+        else {
+            setFilterCommits(commits);
+            setFilterIssues(issues);
+            setFilterEvents(events);
         }
 
-        setFilterCommits(commits);
-        setFilterIssues(issues);
-        setFilterEvents(events);
-    }, [filter, commits, issues, events]);
+    }, [filterActive])
 
     useEffect(() => {
         update();
-        
-        window.addEventListener('storage', listenSessionStorage);
-        return () => window.removeEventListener('storage', listenSessionStorage);
     }, []);
 
     const update = async () => {
         setError(false);
         const token = localStorage.getItem("token");
         const projectName = localStorage.getItem("projectName");
-        console.log(token, projectName);    
         if (token === null || projectName === null) {
             setError(true);
             return;

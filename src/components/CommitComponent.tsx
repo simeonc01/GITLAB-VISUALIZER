@@ -23,7 +23,6 @@ export default function CommitComponent() {
   useEffect(() => {
     const tempCommits = context.commits;
     if (tempCommits !== null) setCommits(tempCommits);
-    console.log(commits);
   }, [context.commits]);
 
   function createData(

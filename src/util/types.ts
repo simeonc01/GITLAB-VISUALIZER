@@ -215,16 +215,16 @@ export type Label = {
 
 // other types
 export interface IContextDefault {
-    commits: Commit[] | null;
+    commits: BetterCommit[] | null;
     branches: Branch[] | null;
-    issues: Issue[] | null;
+    issues: BetterIssue[] | null;
     labels: Label[] | null;
     currentProject: Project | null;
-    events: Event[] | null;
+    events: BetterEvent[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
-    setFilter: (startDate: Date, endDate: Date) => void;
+    setFilter: (startDate: Date | null, endDate: Date | null) => void;
 }
 
 export type UpdateData = {
@@ -251,3 +251,7 @@ export type FilterType = {
     startDate: Date | null;
     endDate: Date | null;
 }
+
+export type BetterIssue = Issue & { created_at_date: Date }
+export type BetterEvent = Event & { created_at_date: Date }
+export type BetterCommit = Commit & { created_at_date: Date }

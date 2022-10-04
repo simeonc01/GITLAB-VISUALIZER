@@ -49,7 +49,6 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
     const [filteredData, setFilteredData] = useState<{index: string, count: number}[]>([]);
     
     useEffect(() => {
-        console.log(props.data);
         setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
     }, [props.data]);
 
@@ -101,7 +100,6 @@ const Activity = () => {
     const context = useContext(GitLabContext);
 
     useEffect(() => {
-        console.log(context.loading);
         if (!context.loading) {
             if (context.events !== null)
                 setEvents(context.events);

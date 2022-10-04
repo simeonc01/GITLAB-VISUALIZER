@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -8,11 +8,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { useSessionStorage } from './useSession';
 import { GitLabContext } from './GitlabProvider';
+import { IContextDefault } from '../util/types';
 export class Filter2 extends React.Component<any, any> {
 
-  static contextType = GitLabContext;
+  static contextType: typeof GitLabContext = GitLabContext;
 
   state = {
     startDate: null,
@@ -20,40 +20,42 @@ export class Filter2 extends React.Component<any, any> {
     resetOption: false
   }
 
-  constructor() {
-    super({});
+  constructor(props: unknown) {
+    super(props);
   }
 
   componentDidMount(): void {
       const start = sessionStorage.getItem("startDate");
       const end = sessionStorage.getItem("endDate");
 
-      if (start !== null)
-        this.setState({startDate: start});
-      if (end !== null) 
-        this.setState({endDate: end}) ;
-      if (start !== null || end !== null)
+      if (start !== null && end !== null)
+        this.setState({startDate: start, endDate: end});
+      else if (start !== null) 
+          this.setState({startDate: start})
+      else if (end !== null) 
+        this.setState({endDate: end});
+      if (start !== null && end !== null)
         this.setState({resetOption: true});
   }
   
-  componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<any>, snapshot?: any): void {
-    console.log(prevState);
-    console.log(this.state)
-    if (this.state.startDate !== null && this.state.endDate !== null)
-      this.updateContext();
-  }
+  componentDidUpdate(prevState: Readonly<any>): void {
+    if (prevState.startDate === this.state.startDate && prevState.endDate === this.state.endDate && prevState.resetOption === this.state.resetOption) return;
 
-  updateContext() {
-    console.log(this.state.startDate, this.state.endDate);
+    // console.log(prevState.resetOption !== this.state.resetOption);
+    this.updateContext(this.state.startDate, this.state.endDate);
+    if (this.state.startDate !== null || this.state.endDate !== null)
+      this.setState({resetOption: true});
+  }
+  
+  updateContext(startDate: Date | null, endDate: Date | null) {
+    const c: IContextDefault = this.context as IContextDefault;
+    c.setFilter(startDate, endDate);
   }
 
   handleChangeStartDate(value: Dayjs | null): void {
     if (value !== null) {
       this.setState({startDate: value.toISOString()})
       sessionStorage.setItem("startDate", value.toISOString())
-      if (this.state.endDate !== null)
-        this.setState({resetOption: true});
-      this.updateContext();
     }
   }
 
@@ -61,9 +63,6 @@ export class Filter2 extends React.Component<any, any> {
     if (value !== null) {
       this.setState({endDate: value.toISOString()});
       sessionStorage.setItem("endDate", value.toISOString())
-      if (this.state.startDate !== null)
-        this.setState({resetOption: true});
-      this.updateContext();
     }
   }
  
@@ -71,6 +70,8 @@ export class Filter2 extends React.Component<any, any> {
     this.setState({resetOption: false, startDate: null, endDate: null});
     sessionStorage.removeItem("startDate");
     sessionStorage.removeItem("endDate");
+    const c: IContextDefault = this.context as IContextDefault;
+    c.setFilter(null, null);
   }
 
   render () {
