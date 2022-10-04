@@ -147,10 +147,7 @@ export class ApiHandler {
             let stopIteration = data.headers["x-next-page"] === "";
     
             while (!stopIteration) {
-                console.log(stopIteration)
                 const d = await wrapPromise(this.handler.get(`/projects/${this.id}/repository/commits?per_page=100&page=${iteration}`))
-                console.log(data.data.length)
-                console.log("32213")
                 data.data.push(...d);
 
                 const dataHeader = await wrapPromiseHeaderIncluded<Commit[]>(
@@ -198,7 +195,6 @@ export class ApiHandler {
                     for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
                         const d = await wrapPromise(this.handler.get(`/projects/${this.id}/issues?per_page=100&page=${i}`))
                         data.data.push(...d);
-                        console.log(d.length);
                     }
                 }
         
@@ -270,9 +266,6 @@ export class ApiHandler {
             });
         }
     }   
-
-
-
 
     public async getLabels(): Promise<Label[]> {
         if (this.id < 0)
