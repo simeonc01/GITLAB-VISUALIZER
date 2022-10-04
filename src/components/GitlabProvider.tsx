@@ -10,6 +10,7 @@ import {
   Project,
   BetterCommit,
   Label,
+  Milestone,
 } from "../util/types";
 
 export const GitLabContext = createContext<IContextDefault>(
@@ -23,6 +24,7 @@ const GitlabProvider = (props: { children?: ReactNode }) => {
   const [currentProject, setCurrentProject] = useState<Project>({} as Project);
   const [events, setEvents] = useState<Event[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -58,6 +60,11 @@ const GitlabProvider = (props: { children?: ReactNode }) => {
     return labels;
   };
 
+  const getMilestones = (): Milestone[] | null => {
+    if (error) return null;
+    return milestones;
+  };
+
   const updateData = () => {
     setLoading(true);
     apiHandler
@@ -77,6 +84,7 @@ const GitlabProvider = (props: { children?: ReactNode }) => {
         setEvents(data.events);
         setLabels(data.labels);
         setLoading(false);
+        setMilestones(data.milestones);
       })
       .catch((err: GitlabError) => {
         setError(true);
@@ -116,6 +124,7 @@ const GitlabProvider = (props: { children?: ReactNode }) => {
         currentProject: getCurrentProject(),
         events: getEvents(),
         labels: getLabels(),
+        milestones: getMilestones(),
         error,
         loading,
         update,

@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosPromise } from 'axios';
-import { Branch, Commit, Issue, Project, UpdateData, Event, Label } from './types';
+import { Branch, Commit, Issue, Project, UpdateData, Event, Label, Milestone } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
     return new Promise<T>((resolve, reject) => {
@@ -45,7 +45,8 @@ export class ApiHandler {
                 this.getIssues(),
                 this.getCurrentProject(),
                 this.getEvents(),
-                this.getLabels()
+                this.getLabels(),
+                this.getMilestones()
             ]).then(data => {
                 resolve({
                     commits: data[0],
@@ -53,7 +54,8 @@ export class ApiHandler {
                     issues: data[2],
                     currentProject: data[3],
                     events: data[4],
-                    labels: data[5]
+                    labels: data[5],
+                    milestones: data[6]
                 });
             }).catch(error => {
                 reject({
@@ -139,6 +141,7 @@ export class ApiHandler {
             })
         );
     }
+    
 
     public async getBranches(): Promise<Branch[]> {
         if (this.id < 0)
@@ -179,5 +182,19 @@ export class ApiHandler {
                 validateStatus: (code: number) => code === 200
             })
         )
+    }
+
+    public async getMilestones(): Promise<Milestone[]> {
+        if (this.id < 0)
+            return Promise.reject<Milestone[]>({
+                message: "Project ID was not set", 
+                data: null
+            });
+        
+        return wrapPromise<Milestone[]>(
+            this.handler.get(`/projects/${this.id}/milestones`, {
+                validateStatus: (code: number) => code === 200
+            })
+        );
     }
 }
