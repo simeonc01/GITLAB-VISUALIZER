@@ -1,66 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Matches snapshot 1`] = `
-<div>
-  <h1>
-    Issues Component
-  </h1>
-  <div
-    className="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiTableContainer-root css-11xur9t-MuiPaper-root-MuiTableContainer-root"
-  >
-    <table
-      aria-label="Commits-table"
-      className="MuiTable-root css-rqglhn-MuiTable-root"
-      role={null}
+exports[`Matches snapshot Only component test 1`] = `
+<svg
+  height="55"
+  width="55"
+>
+  <line
+    stroke="white"
+    stroke-width="2px"
+    x1="25"
+    x2="47"
+    y1="25"
+    y2="25"
+  />
+  <circle
+    cx="25"
+    cy="25"
+    fill="grey"
+    mask="url(#quarter)"
+    r="40%"
+    stroke="white"
+    stroke-width="4%"
+  />
+  <line
+    stroke="white"
+    stroke-width="2px"
+    x1="25"
+    x2="25"
+    y1="3"
+    y2="25"
+  />
+  <line
+    stroke="white"
+    stroke-width="4px"
+    x1="25"
+    x2="41.5"
+    y1="25"
+    y2="8.5"
+  />
+  <defs>
+    <mask
+      id="quarter"
     >
-      <thead
-        className="MuiTableHead-root css-15wwp11-MuiTableHead-root"
-        role={null}
-      >
-        <tr
-          className="MuiTableRow-root MuiTableRow-head css-1q1u3t4-MuiTableRow-root"
-          role={null}
-        >
-          <th
-            aria-sort={null}
-            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
-            scope="col"
-          />
-          <th
-            aria-sort={null}
-            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
-            scope="col"
-          >
-            Issue
-          </th>
-          <th
-            aria-sort={null}
-            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
-            scope="col"
-          >
-            Author
-          </th>
-          <th
-            aria-sort={null}
-            className="MuiTableCell-root MuiTableCell-head MuiTableCell-sizeMedium css-1ygcj2i-MuiTableCell-root"
-            scope="col"
-          >
-            Date created
-          </th>
-          <th
-            aria-sort={null}
-            className="MuiTableCell-root MuiTableCell-head MuiTableCell-alignRight MuiTableCell-sizeMedium css-1azl6jz-MuiTableCell-root"
-            scope="col"
-          >
-            Date closed
-          </th>
-        </tr>
-      </thead>
-      <tbody
-        className="MuiTableBody-root css-apqrd9-MuiTableBody-root"
-        role={null}
+      <rect
+        fill="white"
+        height="50"
+        width="25"
+        x="0"
+        y="0"
       />
-    </table>
-  </div>
-</div>
+      <rect
+        fill="white"
+        height="25"
+        width="50"
+        x="0"
+        y="25"
+      />
+    </mask>
+  </defs>
+</svg>
 `;
