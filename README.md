@@ -18,19 +18,30 @@ Gruppen har benyttet både local- og sessionstorage som gitt i kravbeskrivelsen.
 I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig MUI. Årsaken til at vi valgte nettopp dette biblioteket er at det innehar rikelige UI-komponenter som kan benyttes i react-applikasjonen vår. I tillegg har vi en oppfatning av at MUI blir mye brukt ute i utviklerbransjen, slik at det kan være nyttig for oss å bli kjent med dette biblioteket allerede her. Underveis har vi også tatt i bruke egne React-komponenter i prosjektet. 
 
 
+## Bruk av context
+Hvordan har vi valgt å løse dette??
+
+
 
 ## Testing
-...
+Hva er gjort og hvorfor? 
+Snapshot testing...
 (Se spesielt under punkt 2 for testing i oppgavebeskrivelsen. MAO skriv noen ord om testing på tre ulike enheter).
 
 
 ## Responsiv web design
-...
+...(Hvis ingen har noe her på hjertet så kan vi bare fjerne denne delen tenker jeg)
+
+
+## Ingen direkte bruk av viewport og mdia-queries
+Hva har vi gjort i stedet for (har vell brukt det indirekte?)
+Hvorfor har vu gjort det slik?
+
 
 
 ## Diverse
 ...
-(Kan ta opp det som ikke dekkes i de andre overskriftene)
+(Kan ta opp ting det som ikke dekkes i de andre overskriftene)
 
 
 
