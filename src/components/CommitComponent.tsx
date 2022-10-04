@@ -36,7 +36,6 @@ export default function CommitComponent() {
       setCommits(tempCommits);
     }
     createVisualData();
-    console.log(tempCommits);
   }, [context.commits]);
 
   const createVisualData = () => {
