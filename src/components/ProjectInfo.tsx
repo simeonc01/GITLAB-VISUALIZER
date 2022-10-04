@@ -111,7 +111,7 @@ const InfoBox = (props: {
         >
           <Typography variant="body1">Your projects labels:</Typography>
           {props.labels.map((l) => (
-            <LabelComponent label={l} />
+            <LabelComponent key={l.id} label={l} />
           ))}
         </Box>
       </Box>
