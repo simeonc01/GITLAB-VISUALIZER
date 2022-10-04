@@ -77,7 +77,7 @@ export default function CommitComponent() {
         >
           <Box
             sx={{
-              width: ["400px", "600px"],
+              width: ["300px", "400px", "600px"],
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -99,26 +99,40 @@ export default function CommitComponent() {
             </ResponsiveContainer>
           </Box>
           <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            ml: 1
-          }}
-        >
-            <Typography variant="h6">
-              Number of commits: {commits.length}
-            </Typography>
-            <Typography variant="h6">
-              Last commit by: {commits[0].author_name}
-            </Typography>
-            <Typography variant="h6">
-              Date of last commit:{" "}
-              {commits[0].created_at_date.getDate() +
-                "/" +
-                (commits[0].created_at_date.getMonth() + 1)}
-            </Typography>
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              ml: 1,
+              fontSize: {
+                xs: "12px",
+                sm: "14px",
+                md: "20px",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "block",
+                },
+              }}
+            >
+              <Typography variant="h6" fontSize={"inherit"}>
+                Number of commits: {commits.length}
+              </Typography>
+              <Typography variant="h6" fontSize={"inherit"}>
+                Last commit by: {commits[0].author_name}
+              </Typography>
+              <Typography variant="h6" fontSize={"inherit"}>
+                Date of last commit:{" "}
+                {commits[0].created_at_date.getDate() +
+                  "/" +
+                  (commits[0].created_at_date.getMonth() + 1)}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Container>

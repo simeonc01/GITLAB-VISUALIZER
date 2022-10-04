@@ -25,7 +25,6 @@ function App() {
       <Filter />
       <br />
       <div>
-        <h1>Hello world</h1>
         <Grid container columnSpacing={2} rowSpacing={1}>
           <Grid item xs={12} md={12}>
             <CommitComponent />
