@@ -52,7 +52,6 @@ export class ApiHandler {
     }
 
     public async update(): Promise<UpdateData> {
-        console.log("update called");
         return new Promise<UpdateData>((resolve, reject) => {
             Promise.all([
                 this.getCommits(),
@@ -81,7 +80,7 @@ export class ApiHandler {
         })
     }
 
-    private async getProjectId(projectString: string): Promise<number> {
+    public async getProjectId(projectString: string): Promise<number> {
         return new Promise<number>((resolve, reject) => {
             fetch(`https://gitlab.stud.idi.ntnu.no/api/v4/projects/${encodeURIComponent(projectString)}`, {
                 headers: {
