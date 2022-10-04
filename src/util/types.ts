@@ -246,6 +246,15 @@ export type LineType = {
     stroke?: string;
 }
 
-export interface BetterCommit extends Commit {
-    created_at_date: Date
+export type BetterCommit = Commit & {created_at_date: Date};
+export type BetterIssue = Issue & {created_at_date: Date};
+export type BetterEvent = Event & {created_at_date: Date};
+
+export type FreeDictionary = {
+    [key: string]: number;
+}
+
+export type KeyCount = {
+    index: unknown;
+    count: number;
 }
