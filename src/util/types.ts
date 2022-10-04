@@ -217,14 +217,15 @@ export type Label = {
 export interface IContextDefault {
     commits: BetterCommit[] | null;
     branches: Branch[] | null;
-    issues: Issue[] | null;
+    issues: BetterIssue[] | null;
     labels: Label[] | null;
     currentProject: Project | null;
-    events: Event[] | null;
+    events: BetterEvent[] | null;
     milestones: Milestone[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
+    setFilter: (startDate: Date | null, endDate: Date | null) => void;
 }
 
 export type UpdateData = {
@@ -248,12 +249,17 @@ export type LineType = {
     stroke?: string;
 }
 
-export type BetterCommit = Commit & {created_at_date: Date};
-export type BetterIssue = Issue & {created_at_date: Date};
-export type BetterEvent = Event & {created_at_date: Date};
+export type FilterType = {
+    startDate: Date | null;
+    endDate: Date | null;
+}
 
-export type FreeDictionary = {
-    [key: string]: number;
+export type BetterIssue = Issue & { created_at_date: Date }
+export type BetterEvent = Event & { created_at_date: Date }
+export type BetterCommit = Commit & { created_at_date: Date }
+
+export type FreeDictionary<T> = {
+    [key: string]: T;
 }
 
 export type KeyCount = {

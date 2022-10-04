@@ -16,7 +16,6 @@ const ProjectInfo = () => {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
 
   useEffect(() => {
-    console.log(context.milestones);
     if (!context.loading) {
       if (
         context.currentProject !== null &&

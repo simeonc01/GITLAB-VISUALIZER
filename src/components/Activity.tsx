@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import React, { useContext, useEffect, useState } from 'react';
 import { Area, Bar, CartesianGrid, ComposedChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { countAmountPerDate, countAmoutPerAuthor, countAmoutPerType } from '../util/countHelper';
-import { BetterEvent, Event, KeyCount } from '../util/types';
+import { BetterEvent, KeyCount } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
 import Container from './LayoutContainer';
 
@@ -13,23 +13,18 @@ enum DataTypes {
     Type = "Type"
 }
 
-const DrawChart = (props: {data: Event[], type: DataTypes}) => {
-    const [data, setData] = useState<BetterEvent[]>([]);
+const DrawChart = (props: {data: BetterEvent[], type: DataTypes}) => {
     const [filteredData, setFilteredData] = useState<KeyCount[]>([]);
     
     useEffect(() => {
-        setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})).reverse());
-    }, [props.data]);
-
-    useEffect(() => {
         if (props.data.length !== 0)
             if (props.type === DataTypes.Date)
-                setFilteredData(countAmountPerDate(data));
+                setFilteredData(countAmountPerDate(props.data));
             else if (props.type === DataTypes.Author)
-                setFilteredData(countAmoutPerAuthor(data));
+                setFilteredData(countAmoutPerAuthor(props.data));
             else if (props.type === DataTypes.Type)
-                setFilteredData(countAmoutPerType(data));
-    }, [data, props.type])
+                setFilteredData(countAmoutPerType(props.data));
+    }, [props.data, props.type])
 
     return (
         <ResponsiveContainer width='100%' height={250}>
@@ -64,17 +59,19 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
 }
 
 const Activity = () => {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<BetterEvent[]>([]);
     const [type, setType] = useState<DataTypes>(DataTypes.Date);
 
     const context = useContext(GitLabContext);
 
     useEffect(() => {
         if (!context.loading) {
-            if (context.events !== null)
+            if (context.events !== null) {
+                console.log(context.events);
                 setEvents(context.events);
+            }
         }
-    }, [context.loading])
+    }, [context.loading, context.events])
 
     const handleChangeType = (event: React.MouseEvent<HTMLElement>, value: DataTypes) => {
         if (value !== null)

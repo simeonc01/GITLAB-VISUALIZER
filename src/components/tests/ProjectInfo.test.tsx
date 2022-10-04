@@ -1,6 +1,6 @@
 import renderer from "react-test-renderer";
-import { Label, Project } from "../util/types";
-import ProjectInfoContent from "../components/ProjectInfoContent";
+import { Label, Project } from "../../util/types";
+import ProjectInfoContent from "../ProjectInfoContent";
 
 it("Simple ProjectInfoContent test", () => {
   const p = {} as Project;

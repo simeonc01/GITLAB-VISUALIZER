@@ -19,19 +19,16 @@ function App() {
         <Grid item xs={12} md={7}>
           <Activity />
         </Grid>
-      </Grid>
-      <Filter />
-      <br />
-      <div>
-        <Grid container columnSpacing={2} rowSpacing={1}>
-          <Grid item xs={12} md={12}>
-            <CommitComponent />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <IssuesComponent/>
-          </Grid>
+        <Grid item xs={12} md={12}>
+          <Filter />
         </Grid>
-      </div>
+        <Grid item xs={12} md={12}>
+          <CommitComponent />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <IssuesComponent/>
+        </Grid>
+      </Grid>
     </GitlabProvider>
   );
 }
