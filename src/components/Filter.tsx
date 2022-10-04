@@ -31,17 +31,15 @@ export class Filter2 extends React.Component<any, any> {
       if (start !== null && end !== null)
         this.setState({startDate: start, endDate: end});
       else if (start !== null) 
-          this.setState({startDate: start})
+          this.setState({startDate: start});
       else if (end !== null) 
         this.setState({endDate: end});
       if (start !== null && end !== null)
         this.setState({resetOption: true});
   }
   
-  componentDidUpdate(prevState: Readonly<any>): void {
+  componentDidUpdate(prevProp: Readonly<any>, prevState: Readonly<any>): void {
     if (prevState.startDate === this.state.startDate && prevState.endDate === this.state.endDate && prevState.resetOption === this.state.resetOption) return;
-
-    // console.log(prevState.resetOption !== this.state.resetOption);
     this.updateContext(this.state.startDate, this.state.endDate);
     if (this.state.startDate !== null || this.state.endDate !== null)
       this.setState({resetOption: true});

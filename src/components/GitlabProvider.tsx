@@ -23,7 +23,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getCommits = (): BetterCommit[] | null => {
         if (error) return null;
-        return commits;
+        return filterCommits;
     }
 
     const getBranches = (): Branch[] | null => {
@@ -33,7 +33,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getIssues = (): BetterIssue[] | null => {
         if (error) return null;
-        return issues;
+        return filterIssues;
     }
 
     const getCurrentProject = (): Project | null => {
@@ -43,7 +43,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
 
     const getEvents = (): BetterEvent[] | null => {
         if (error) return null;
-        return events;
+        return filterEvents;
     }
     
     const getLabels = (): Label[] | null => {
@@ -78,16 +78,35 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         }
     }
 
+    const filterFunc = (elem: BetterCommit | BetterEvent | BetterIssue) => {
+        if (filter.startDate === null && filter.endDate === null) return true;
+        else if (filter.startDate !== null && filter.endDate === null) {
+            const start = new Date(filter.startDate);
+            return elem.created_at_date > start;
+        }
+        else if (filter.startDate === null && filter.endDate !== null) {
+            const end = new Date(filter.endDate);
+            return elem.created_at_date < end;
+        } else if (filter.startDate !== null && filter.endDate !== null) {
+            const start = new Date(filter.startDate);
+            const end = new Date(filter.endDate);
+            return start < elem.created_at_date && elem.created_at_date < end;
+        }
+    }
+
     useEffect(() => {
-        if (filterActive)
-            console.log("we are filtering")
+        if (filterActive) {
+            setFilterCommits(commits.filter(filterFunc));
+            setFilterIssues(issues.filter(filterFunc));
+            setFilterEvents(events.filter(filterFunc));
+        }
         else {
             setFilterCommits(commits);
             setFilterIssues(issues);
             setFilterEvents(events);
         }
 
-    }, [filterActive])
+    }, [filterActive, filter])
 
     useEffect(() => {
         update();

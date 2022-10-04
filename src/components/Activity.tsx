@@ -101,10 +101,12 @@ const Activity = () => {
 
     useEffect(() => {
         if (!context.loading) {
-            if (context.events !== null)
+            if (context.events !== null) {
+                console.log(context.events);
                 setEvents(context.events);
+            }
         }
-    }, [context.loading])
+    }, [context.loading, context.events])
 
     const handleChangeType = (event: React.MouseEvent<HTMLElement>, value: DataTypes) => {
         if (value !== null)
