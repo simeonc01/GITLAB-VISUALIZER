@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Simple ProjectInfoContent test 1`] = `
+Array [
+  <h5
+    className="MuiTypography-root MuiTypography-h5 css-p4tdjl-MuiTypography-root"
+  >
+    Name
+  </h5>,
+  <div
+    className="MuiBox-root css-12wop9s"
+  >
+    <div
+      className="MuiBox-root css-1rbokul"
+    >
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        ⭐ Your project has 
+        2
+         stars
+      </p>
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        💪 The last activity was at
+         
+        Invalid Date
+      </p>
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        🥚 Your project was created at
+         
+        Invalid Date
+      </p>
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        🍴 Your project has been forked 
+        0
+         times
+      </p>
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        🚩 Your project has 
+        0
+         milestone
+        s
+      </p>
+    </div>
+    <hr
+      className="MuiDivider-root MuiDivider-fullWidth MuiDivider-vertical MuiDivider-flexItem css-1tk1bks-MuiDivider-root"
+    />
+    <div
+      className="MuiBox-root css-memq11"
+    >
+      <p
+        className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      >
+        Your projects labels:
+      </p>
+      <div
+        aria-label="desc"
+        aria-labelledby={null}
+        className="MuiBox-root css-1uc3ujw"
+        data-mui-internal-clone-element={true}
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onMouseLeave={[Function]}
+        onMouseOver={[Function]}
+        onTouchEnd={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "backgroundColor": "#d9534f",
+            "color": "#FFFFFF",
+          }
+        }
+      >
+        <p
+          className="MuiTypography-root MuiTypography-body1 css-1ezobfm-MuiTypography-root"
+        >
+          bug
+        </p>
+      </div>
+    </div>
+  </div>,
+]
+`;
