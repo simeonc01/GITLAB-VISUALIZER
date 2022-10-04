@@ -21,8 +21,6 @@ Hva er gjort og hvorfor?
 Snapshot testing...
 (Se spesielt under punkt 2 for testing i oppgavebeskrivelsen. MAO skriv noen ord om testing på tre ulike enheter).
 
-## Responsiv web design
-...(Hvis ingen har noe her på hjertet så kan vi bare fjerne denne delen tenker jeg)(Jeg nevnte dette i "Eksternt UI-bibliotek", tror det holder - Johan)
 
 ## Ingen direkte bruk av viewport og mdia-queries
 Hva har vi gjort i stedet for (har vell brukt det indirekte?)
