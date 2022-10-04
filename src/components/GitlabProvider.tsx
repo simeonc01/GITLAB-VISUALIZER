@@ -1,44 +1,60 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType, BetterCommit, BetterIssue, BetterEvent } from '../util/types';
-
-export const GitLabContext = createContext<IContextDefault>({} as IContextDefault);
+import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType, BetterCommit, BetterIssue, BetterEvent, Milestone } from '../util/types';
+export const GitLabContext = createContext<IContextDefault>(
+  {} as IContextDefault
+);
 
 const GitlabProvider = (props: {children?: ReactNode}) => {
-    const [filter, setFilter] = useState<FilterType>({startDate: null, endDate: null});
-    const [filterActive, setFilterActive] = useState<boolean>(false);
-    const [commits, setCommits] = useState<BetterCommit[]>([]);
-    const [filterCommits, setFilterCommits] = useState<BetterCommit[]>([]);
-    const [branches, setBranches] = useState<Branch[]>([]);
-    const [issues, setIssues] = useState<BetterIssue[]>([]);
-    const [filterIssues, setFilterIssues] = useState<BetterIssue[]>([]);
-    const [currentProject, setCurrentProject] = useState<Project>({} as Project);
-    const [events, setEvents] = useState<BetterEvent[]>([]);
-    const [filterEvents, setFilterEvents] = useState<BetterEvent[]>([]);
-    const [labels, setLabels] = useState<Label[]>([]);
-    const [error, setError] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+  const [filter, setFilter] = useState<FilterType>({startDate: null, endDate: null});
+  const [filterActive, setFilterActive] = useState<boolean>(false);
+  const [commits, setCommits] = useState<BetterCommit[]>([]);
+  const [filterCommits, setFilterCommits] = useState<BetterCommit[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
+  const [issues, setIssues] = useState<BetterIssue[]>([]);
+  const [filterIssues, setFilterIssues] = useState<BetterIssue[]>([]);
+  const [currentProject, setCurrentProject] = useState<Project>({} as Project);
+  const [events, setEvents] = useState<BetterEvent[]>([]);
+  const [filterEvents, setFilterEvents] = useState<BetterEvent[]>([]);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [labels, setLabels] = useState<Label[]>([]);
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-    const apiHandler = new ApiHandler("", "");
+  const apiHandler = new ApiHandler("", "");
 
-    const getCommits = (): BetterCommit[] | null => {
-        if (error) return null;
-        return filterCommits;
+  const getCommits = (): BetterCommit[] | null => {
+      if (error) return null;
+      return filterCommits;
+  
     }
+  const getBranches = (): Branch[] | null => {
+    if (error) return null;
+    return branches;
+  };
 
-    const getBranches = (): Branch[] | null => {
-        if (error) return null;
-        return branches;
-    }
+  const getCurrentProject = (): Project | null => {
+    if (error) return null;
+    return currentProject;
+  };
+
+  const getLabels = (): Label[] | null => {
+    if (error) return null;
+    return labels;
+  };
+
+  const getMilestones = (): Milestone[] | null => {
+    if (error) return null;
+    return milestones;
+  };
+
+  useEffect(() => {
+    update();
+  }, []);
 
     const getIssues = (): BetterIssue[] | null => {
         if (error) return null;
         return filterIssues;
-    }
-
-    const getCurrentProject = (): Project | null => {
-        if (error) return null;
-        return currentProject;
     }
 
     const getEvents = (): BetterEvent[] | null => {
@@ -46,10 +62,6 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         return filterEvents;
     }
     
-    const getLabels = (): Label[] | null => {
-        if (error) return null;
-        return labels;
-    }
 
     const updateData = () => {
         setLoading(true);
@@ -60,6 +72,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             setCurrentProject(data.currentProject);
             setEvents(data.events.map(e => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
             setLabels(data.labels);
+            setMilestones(data.milestones);
             setLoading(false);
         }).catch((err: GitlabError) => {
             setError(true);
@@ -136,6 +149,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             currentProject: getCurrentProject(),
             events: getEvents(),
             labels: getLabels(),
+            milestones: getMilestones(),
             error,
             loading,
             update,

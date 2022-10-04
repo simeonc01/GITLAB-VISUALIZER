@@ -1,114 +1,142 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Commit } from "../util/types";
+import { useContext, useEffect, useState } from "react";
+import { BetterCommit } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Container from "./LayoutContainer";
+import { Box } from "@mui/material";
+
+interface IVisualData {
+  author: string;
+  numberOfCommits: number;
+}
 
 export default function CommitComponent() {
-  const [commits, setCommits] = useState<Commit[]>([]);
+  const [commits, setCommits] = useState<BetterCommit[]>([]);
+  const [visualData, setVisualData] = useState<IVisualData[]>([]);
 
   const context = useContext(GitLabContext);
 
   useEffect(() => {
     const tempCommits = context.commits;
-    if (tempCommits !== null) setCommits(tempCommits);
+    if (tempCommits !== null) {
+      tempCommits.sort((a, b) => {
+        if (a.created_at < b.created_at) return 1;
+        return -1;
+      });
+      setCommits(tempCommits);
+    }
+    createVisualData();
+    console.log(tempCommits);
   }, [context.commits]);
 
-  function createData(
-    title: string,
-    author: string,
-    commited_date: string,
-    message: string
-  ) {
-    return {
-      title: title,
-      author: author,
-      commited_date: commited_date,
-      message: message,
-    };
-  }
+  const createVisualData = () => {
+    const tempVisualData: IVisualData[] = [];
+    let found = false;
 
-  const rows: ReturnType<typeof createData>[] = commits.map((commit) => {
-    const yyyymmdd = commit.committed_date
-      .substring(0, commit.committed_date.indexOf("T"))
-      .split("-");
-    const date = yyyymmdd[2] + "/" + yyyymmdd[1];
-    return createData(commit.title, commit.author_name, date, commit.message);
-  });
+    commits.forEach((commit) => {
+      const author = commit.author_email.split("@")[0].replace(/[^a-z]/gi, "");
+      tempVisualData.forEach((object) => {
+        if (object.author === author) {
+          object.numberOfCommits += 1;
+          found = true;
+        }
+      });
+      if (!found) {
+        tempVisualData.push({
+          author,
+          numberOfCommits: 1,
+        });
+      }
+      found = false;
+    });
 
-  function Row(props: { row: ReturnType<typeof createData> }) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
+    setVisualData(tempVisualData);
+  };
 
+  if (commits.length !== 0)
     return (
-      <React.Fragment>
-        <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-          <TableCell>
-            <IconButton
-              aria-label="expand row"
-              size="small"
-              onClick={() => setOpen(!open)}
+      <Container>
+        <Typography variant="h5">Commits</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: ["300px", "400px", "600px"],
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={visualData} barCategoryGap={"30%"}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="author" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  name="Number of Commits"
+                  dataKey="numberOfCommits"
+                  fill="#8884d8"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              ml: 1,
+              fontSize: {
+                xs: "12px",
+                sm: "14px",
+                md: "20px",
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "block",
+                },
+              }}
             >
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.title}
-          </TableCell>
-          <TableCell>{row.author}</TableCell>
-          <TableCell align="right">{row.commited_date}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1, ml: 2 }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Message:
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  {row.message}
-                </Typography>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
-      </React.Fragment>
+              <Typography variant="h6" fontSize={"inherit"}>
+                Number of commits: {commits.length}
+              </Typography>
+              <Typography variant="h6" fontSize={"inherit"}>
+                Last commit by: {commits[0].author_name}
+              </Typography>
+              <Typography variant="h6" fontSize={"inherit"}>
+                Date of last commit:{" "}
+                {commits[0].created_at_date.getDate() +
+                  "/" +
+                  (commits[0].created_at_date.getMonth() + 1)}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
     );
-  }
 
-  return (
-    <div>
-      <Typography variant="h6" sx={{ my: 2, ml: 10 }}>
-        Commit log
-      </Typography>
-      <TableContainer sx={{ maxHeight: 440 }} component={Paper}>
-        <Table stickyHeader aria-label="Commits-table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Title</TableCell>
-              <TableCell>Author</TableCell>
-              <TableCell align="right">Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.title + row.author} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-  );
+  return <></>;
 }

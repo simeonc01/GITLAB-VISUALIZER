@@ -96,7 +96,7 @@ export type Issue = {
 
 export type Project = {
     _links: object;
-    allow_merge_on_skipped_pipeline: any;
+    allow_merge_on_skipped_pipeline: unknown;
     analytics_access_level: string;
     archived: boolean;
     auto_cancel_pending_pipelines: string;
@@ -221,6 +221,7 @@ export interface IContextDefault {
     labels: Label[] | null;
     currentProject: Project | null;
     events: BetterEvent[] | null;
+    milestones: Milestone[] | null;
     error: boolean;
     loading: boolean;
     update: () => void;
@@ -234,6 +235,7 @@ export type UpdateData = {
     currentProject: Project;
     events: Event[];
     labels: Label[];
+    milestones: Milestone[];
 }
 
 export type GitlabError = {
@@ -255,3 +257,12 @@ export type FilterType = {
 export type BetterIssue = Issue & { created_at_date: Date }
 export type BetterEvent = Event & { created_at_date: Date }
 export type BetterCommit = Commit & { created_at_date: Date }
+
+export type FreeDictionary = {
+    [key: string]: number;
+}
+
+export type KeyCount = {
+    index: unknown;
+    count: number;
+}
