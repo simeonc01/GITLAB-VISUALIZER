@@ -1,30 +1,37 @@
 # Prosjekt 2 - IT2810 Webutvikling
+
 Prosjektet skal visualisere GitLab data. For å gjøre dette benytter vi oss av GitLab sitt eget api. Webapplikasjonen er skrevet ved hjelp av React i TypeScript. For å starte prosjektet klikker du øverst til høyre. I URL-feltet skrives URL'en fra hjemsiden til prosjektet ditt. "https://gitlab.stud.idi.ntnu.no/it2810-h22/Team-<ditt team nummer>/<ditt prosjekt navn>". I Token id skrives Access Token som du finner under settingsmenyen i ditt prosjekt.
 
-
 ## Bruk av context
+
 Vi har benyttet oss av React sitt Context API. Vi har wrappet hele applikasjonen i dette slik at alle komponenter kan benytte seg av det. Vi valgte å bruke Context'en til å holde på all dataen som vi henter fra gitLab API'et. Dette syntes vi var hensiktsmessig siden da kan informasjonen brukes på tvers av komponentene med minimalt antall kall til API'et.
 
 ## Eksternt UI-bibliotek
+
 Materiel UI (MUI) ble benyttet slik at vi slapp å designe egne komponenter fra bunnen av. Vi valgte MUI siden det dekker alt av nødvendige basiskomponenter. MUI har også gode løsninger for skalering av nettsiden som gir hjelper å oppfylle kravet om et responsivt web design.
 
 ## AJAX
+
 For å hente data fra gitLab API'et valgte vi å benytte oss av Axios. En grunn til at vi valgte å bruke Axios er fordi Axios kommer med ferdig JSON-parsing, noe JavaScript sin fetch-funksjon ikke gjør.
 
 ## Local- og sessionstorage
+
 Gruppen har benyttet både local- og sessionstorage som gitt i kravbeskrivelsen. Localstorage er blitt brutk til å lagre URL og token lokalt i webleseren uten noe tidbegrensning. Tanken bak dette er at vi ønsker at brukeren skal kunne åpne webapplikasjonen ved en senere anledning uten å må taste inn URL og token på nytt. For å lagre filtreringsdatoene har vi valgt å benytte oss av sessionstorage. Årsaken til dette valget er at vi tenker det er hensiktsmessig å lagre disse datoene så lenge nettleseren er oppe. Men dersom nettleseren lukkes har vi kommet fram til at det ikke vil være nødvendig å lagre disse datoene, ettersom det er stor sannsynlighet at brukeren vil ønske å se på andre datoer neste gang.
 
 ## Testing
+
 Hva er gjort og hvorfor?
 Snapshot testing...
 (Se spesielt under punkt 2 for testing i oppgavebeskrivelsen. MAO skriv noen ord om testing på tre ulike enheter).
 
 
 ## Ingen bruk av viewport og mdia-queries
+
 Hva har vi gjort i stedet for (har vell brukt det indirekte?)
 Hvorfor har vu gjort det slik?
 
 ## Diverse
+
 ...
 (Kan ta opp ting det som ikke dekkes i de andre overskriftene) (Slett dette avsnittet hvis vi ikka har noe på dette! - Simeon)
 
