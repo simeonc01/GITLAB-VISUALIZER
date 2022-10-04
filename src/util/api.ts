@@ -135,12 +135,47 @@ export class ApiHandler {
                 message: "Project ID was not set", 
                 data: null
             });
+        
+        try {
+            const data = await wrapPromiseHeaderIncluded<Commit[]>(
+                this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
+                    validateStatus: (code: number) => code === 200
+                })
+            )
 
-        return wrapPromise<Commit[]>(
-            this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        );
+            let iteration = 2
+            let stopIteration = data.headers["x-next-page"] === "";
+    
+            while (!stopIteration) {
+                console.log(stopIteration)
+                const d = await wrapPromise(this.handler.get(`/projects/${this.id}/repository/commits?per_page=100&page=${iteration}`))
+                console.log(data.data.length)
+                console.log("32213")
+                data.data.push(...d);
+
+                const dataHeader = await wrapPromiseHeaderIncluded<Commit[]>(
+                    this.handler.get(`/projects/${this.id}/repository/commits?per_page=100&page=${iteration}`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                )
+
+                if (dataHeader.headers["x-next-page"] !== "") {
+                    iteration++;
+                }
+                else {
+                    stopIteration = true;
+                }
+            }
+
+            
+            return Promise.resolve<Commit[]>(data.data);
+            
+        } catch (e) {
+            return Promise.reject<Commit[]>({
+                message: e, 
+                data: null
+            });
+        } 
     }
 
     
