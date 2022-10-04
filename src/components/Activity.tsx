@@ -19,16 +19,17 @@ const DrawChart = (props: {data: BetterEvent[], type: DataTypes}) => {
     useEffect(() => {
         if (props.data.length !== 0)
             if (props.type === DataTypes.Date)
-                setFilteredData(countAmountPerDate(props.data));
+                setFilteredData(countAmountPerDate(props.data).reverse());
             else if (props.type === DataTypes.Author)
-                setFilteredData(countAmoutPerAuthor(props.data));
+                setFilteredData(countAmoutPerAuthor(props.data).reverse());
             else if (props.type === DataTypes.Type)
-                setFilteredData(countAmoutPerType(props.data));
+                setFilteredData(countAmoutPerType(props.data).reverse());
+        
     }, [props.data, props.type])
 
     return (
         <ResponsiveContainer width='100%' height={250}>
-            <ComposedChart data={filteredData.reverse()}>
+            <ComposedChart data={filteredData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <defs>
                     <linearGradient id="dataStuff" x1="0" y1="0" x2="0" y2="1">
