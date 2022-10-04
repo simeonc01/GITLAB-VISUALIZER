@@ -1,9 +1,9 @@
 import { expect, test } from "@jest/globals";
 import "@testing-library/jest-dom/extend-expect";
-import { render } from "react-dom";
 import renderer from "react-test-renderer";
-import IssuesComponent from "../components/IssuesComponent";
-import Logo from "../components/Logo";
+import {render, screen} from '@testing-library/react';
+import IssuesComponent from "../IssuesComponent";
+import Logo from "../Logo";
 
 /*jest --updateSnapshot Når snapshoten endrer seg*/
 describe("Snapshot tests", () => {

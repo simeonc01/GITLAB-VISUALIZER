@@ -51,6 +51,7 @@ export default class Filter extends React.Component<any, any> {
   }
 
   handleChangeStartDate(value: Dayjs | null): void {
+    console.log(value);
     if (value !== null) {
       this.setState({startDate: value.toISOString()})
       sessionStorage.setItem("startDate", value.toISOString())
@@ -83,7 +84,7 @@ export default class Filter extends React.Component<any, any> {
               value={this.state.startDate}
               onChange={this.handleChangeStartDate.bind(this)}
               disableFuture={true}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField {...params} data-testid={'startDatePicker'}/>}
             />
             <DesktopDatePicker
               label="End Date"
@@ -93,7 +94,7 @@ export default class Filter extends React.Component<any, any> {
               disableFuture={false}
               renderInput={(params) => <TextField {...params} />}
             />
-            {this.state.resetOption && <Button onClick={this.resetDates.bind(this)} variant="outlined" startIcon={<DeleteIcon />}>
+            {this.state.resetOption && <Button onClick={this.resetDates.bind(this)} variant="outlined" startIcon={<DeleteIcon />} data-testid={'resetButton'}>
               Reset
             </Button> }
           </Stack>

@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { ApiHandler } from '../util/api';
-import { Branch, Commit, GitlabError, IContextDefault, Issue, Project, Event, Label, FilterType, BetterCommit, BetterIssue, BetterEvent, Milestone } from '../util/types';
+import { Branch, GitlabError, IContextDefault, Project, Label, FilterType, BetterCommit, BetterIssue, BetterEvent, Milestone } from '../util/types';
 export const GitLabContext = createContext<IContextDefault>(
   {} as IContextDefault
 );
