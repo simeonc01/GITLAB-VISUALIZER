@@ -18,7 +18,7 @@ const DrawChart = (props: {data: Event[], type: DataTypes}) => {
     const [filteredData, setFilteredData] = useState<KeyCount[]>([]);
     
     useEffect(() => {
-        setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
+        setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})).reverse());
     }, [props.data]);
 
     useEffect(() => {

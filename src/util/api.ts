@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosPromise } from 'axios';
+import axios, { AxiosInstance, AxiosPromise, AxiosResponseHeaders } from 'axios';
 import { Branch, Commit, Issue, Project, UpdateData, Event, Label, Milestone } from './types';
 
 function wrapPromise<T>(axios: AxiosPromise<T>) {
@@ -16,6 +16,23 @@ function wrapPromise<T>(axios: AxiosPromise<T>) {
         });
     });
 }
+
+function wrapPromiseHeaderIncluded<T>(axios: AxiosPromise<T>) {
+    return new Promise<{data: T, headers: AxiosResponseHeaders}>((resolve, reject) => {
+        axios.then(d => {
+            resolve({data: d.data, headers: d.headers});
+        }).catch(async (error) => {
+            if (error.response) {
+                reject(error.response.data.message);
+            } else {
+                reject(error.message);
+            }
+        });
+    })
+}
+
+
+
 
 export class ApiHandler {
     private readonly handler: AxiosInstance;
@@ -120,26 +137,76 @@ export class ApiHandler {
                 message: "Project ID was not set", 
                 data: null
             });
+        
+        try {
+            const data = await wrapPromiseHeaderIncluded<Commit[]>(
+                this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
+                    validateStatus: (code: number) => code === 200
+                })
+            )
 
-        return wrapPromise<Commit[]>(
-            this.handler.get(`/projects/${this.id}/repository/commits?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        );
+            let iteration = 2
+            let stopIteration = data.headers["x-next-page"] === "";
+    
+            while (!stopIteration) {
+                const d = await wrapPromise(this.handler.get(`/projects/${this.id}/repository/commits?per_page=100&page=${iteration}`))
+                data.data.push(...d);
+
+                const dataHeader = await wrapPromiseHeaderIncluded<Commit[]>(
+                    this.handler.get(`/projects/${this.id}/repository/commits?per_page=100&page=${iteration}`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                )
+
+                if (dataHeader.headers["x-next-page"] !== "") {
+                    iteration++;
+                }
+                else {
+                    stopIteration = true;
+                }
+            }
+
+            
+            return Promise.resolve<Commit[]>(data.data);
+            
+        } catch (e) {
+            return Promise.reject<Commit[]>({
+                message: e, 
+                data: null
+            });
+        } 
     }
 
+    
     public async getIssues(): Promise<Issue[]> {
         if (this.id < 0)
             return Promise.reject<Issue[]>({
                 message: "Project ID was not set", 
                 data: null
             });
+
+
+            try {
+                const data = await wrapPromiseHeaderIncluded<Issue[]>(
+                    this.handler.get<Issue[]>(`/projects/${this.id}/issues?per_page=100`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                );
         
-        return wrapPromise<Issue[]>(
-            this.handler.get(`/projects/${this.id}/issues?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        );
+                if (parseInt(data.headers["x-total-pages"]) > 1) {
+                    for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                        const d = await wrapPromise(this.handler.get(`/projects/${this.id}/issues?per_page=100&page=${i}`))
+                        data.data.push(...d);
+                    }
+                }
+        
+                return Promise.resolve<Issue[]>(data.data);
+            } catch (e) {
+                return Promise.reject<Issue[]>({
+                    message: e, 
+                    data: null
+                });
+            }
     }
     
 
@@ -150,11 +217,27 @@ export class ApiHandler {
                 data: null
             });
         
-        return wrapPromise<Branch[]>(
-            this.handler.get(`/projects/${this.id}/repository/branches?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        );
+            try {
+                const data = await wrapPromiseHeaderIncluded<Branch[]>(
+                    this.handler.get<Branch[]>(`/projects/${this.id}/repository/branches?per_page=100`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                );
+        
+                if (parseInt(data.headers["x-total-pages"]) > 1) {
+                    for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                        const d = await wrapPromise(this.handler.get(`/projects/${this.id}/repository/brances?per_page=100&page=${i}`))
+                        data.data.push(...d);
+                    }
+                }
+        
+                return Promise.resolve<Branch[]>(data.data);
+            } catch (e) {
+                return Promise.reject<Branch[]>({
+                    message: e, 
+                    data: null
+                });
+            }
     }
 
     public async getEvents(): Promise<Event[]> {
@@ -164,12 +247,29 @@ export class ApiHandler {
                 data: null
             });
 
-        return wrapPromise<Event[]>(
-            this.handler.get<Event[]>(`/projects/${this.id}/events?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        )
+        try {
+            const data = await wrapPromiseHeaderIncluded<Event[]>(
+                this.handler.get<Event[]>(`/projects/${this.id}/events?per_page=100`, {
+                    validateStatus: (code: number) => code === 200
+                })
+            );
+            if (parseInt(data.headers["x-total-pages"]) > 1) {
+                for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                    const d = await wrapPromise(this.handler.get(`/projects/${this.id}/events?per_page=100&page=${i}`))
+                    data.data.push(...d);
+                    console.log(d.length);
+                }
+            }
+    
+            return Promise.resolve<Event[]>(data.data);
+        } catch (e) {
+            return Promise.reject<Event[]>({
+                message: e, 
+                data: null
+            });
+        }
     }   
+
     public async getLabels(): Promise<Label[]> {
         if (this.id < 0)
             return Promise.reject<Label[]>({
