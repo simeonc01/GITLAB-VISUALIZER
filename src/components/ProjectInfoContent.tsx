@@ -62,6 +62,11 @@ export default function ProjectInfoContent(props: {
                 float: "right",
                 alignItems: "center",
                 marginLeft: 1,
+                mb: 2,
+                height: 230,
+                overflow: "hidden",
+                overflowY: "scroll",
+               // justifyContent="flex-end" # DO NOT USE THIS WITH 'scroll'
               }}
             >
               <Typography variant="body1">Your projects labels:</Typography>
