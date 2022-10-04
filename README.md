@@ -21,6 +21,9 @@ I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig 
 ## Bruk av context
 Vi har benyttet oss av React sitt Context API. Vi har wrappet hele applikasjonen i dette slik at alle komponenter kan benytte seg av det. Vi valgte å bruke Context'en til å holde på all dataen som vi henter fra gitLab API'et. Dette syntes vi var hensiktsmessig siden da kan informasjonen brukes på tvers av komponentene med minimalt antall kall til API'et.
 
+## Eksternt UI-bibliotek
+Materiel UI (MUI) ble benyttet slik at vi slapp å designe egne komponenter fra bunnen av. Vi valgte MUI siden det dekker alt av nødvendige basiskomponenter. MUI har gode løsninger for skalering av nettsiden som gir hjelper å oppfylle kravet om et responsivt web design.
+
 ## Testing
 Hva er gjort og hvorfor? 
 Snapshot testing...
@@ -28,7 +31,7 @@ Snapshot testing...
 
 
 ## Responsiv web design
-...(Hvis ingen har noe her på hjertet så kan vi bare fjerne denne delen tenker jeg)
+...(Hvis ingen har noe her på hjertet så kan vi bare fjerne denne delen tenker jeg)(Jeg nevnte dette i "Eksternt UI-bibliotek", tror det holder - Johan)
 
 
 ## Ingen direkte bruk av viewport og mdia-queries
