@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Activity from "./Activity";
 import CommitComponent from "./CommitComponent";
 import Filter from "./Filter";
@@ -9,8 +9,8 @@ import ProjectInfo from "./ProjectInfo";
 
 function Overview() {
   const context = useContext(GitLabContext);
+  
 
-  console.log(context.instanciated)
   if (context.instanciated) {
     return (
       <Grid container columnSpacing={2} rowSpacing={1}>
