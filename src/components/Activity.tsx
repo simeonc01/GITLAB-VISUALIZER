@@ -2,7 +2,8 @@ import { CircularProgress, Divider, ToggleButton, ToggleButtonGroup, Typography 
 import Box from '@mui/material/Box';
 import React, { useContext, useEffect, useState } from 'react';
 import { Area, Bar, CartesianGrid, ComposedChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { Event } from '../util/types';
+import { countAmountPerDate, countAmoutPerAuthor, countAmoutPerType } from '../util/countHelper';
+import { BetterEvent, Event, KeyCount } from '../util/types';
 import { GitLabContext } from './GitlabProvider';
 import Container from './LayoutContainer';
 
@@ -12,42 +13,9 @@ enum DataTypes {
     Type = "Type"
 }
 
-interface BetterEvent extends Event {created_at_date: Date}
-
-interface uniqueCount {
-    [key: string]: number;
-}
-
-const countAmountPerDate = (list: BetterEvent[]) => {
-    const r: uniqueCount = {};
-    const uniqueDates = new Set<string>();
-    list.map(d => (d.created_at_date.toISOString())).forEach(a => uniqueDates.add(a));
-    uniqueDates.forEach(date => r[date] = 0);
-    list.forEach(d => r[d.created_at_date.toISOString()]++);
-    return Object.keys(r).map(k => ({index: new Date(k).toLocaleDateString('en-us'), count: r[k]}));
-}
-
-const countAmoutPerAuthor = (list: BetterEvent[]) => {
-    const r: uniqueCount = {};
-    const uniqueAuthors = new Set<string>();
-    list.forEach(a => uniqueAuthors.add(a.author.username));
-    uniqueAuthors.forEach(a => r[a] = 0);
-    list.forEach(a => r[a.author.username]++);
-    return Object.keys(r).map(k => ({index: k, count: r[k]}));
-}
-
-const countAmoutPerType = (list: BetterEvent[]) => {
-    const r: uniqueCount = {};
-    const uniqueTypes = new Set<string>();
-    list.forEach(a => uniqueTypes.add(a.action_name));
-    uniqueTypes.forEach(a => r[a] = 0);
-    list.forEach(a => r[a.action_name]++);
-    return Object.keys(r).map(k => ({index: k, count: r[k]}));
-}
-
 const DrawChart = (props: {data: Event[], type: DataTypes}) => {
     const [data, setData] = useState<BetterEvent[]>([]);
-    const [filteredData, setFilteredData] = useState<{index: string, count: number}[]>([]);
+    const [filteredData, setFilteredData] = useState<KeyCount[]>([]);
     
     useEffect(() => {
         setData(props.data.map((e: Event) => ({created_at_date: new Date(new Date(e.created_at).setHours(0,0,0,0)), ...e})));
