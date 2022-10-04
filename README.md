@@ -20,13 +20,13 @@ Snapshot testing...
 (Se spesielt under punkt 2 for testing i oppgavebeskrivelsen. MAO skriv noen ord om testing på tre ulike enheter).
 
 
-## Ingen direkte bruk av viewport og mdia-queries
+## Ingen bruk av viewport og mdia-queries
 Hva har vi gjort i stedet for (har vell brukt det indirekte?)
 Hvorfor har vu gjort det slik?
 
 ## Diverse
 ...
-(Kan ta opp ting det som ikke dekkes i de andre overskriftene)
+(Kan ta opp ting det som ikke dekkes i de andre overskriftene) (Slett dette avsnittet hvis vi ikka har noe på dette! - Simeon)
 
 Kommandoer:
 ### `npm start`
