@@ -20,6 +20,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
   const [labels, setLabels] = useState<Label[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [instanciated, setInstanciated] = useState<boolean>(false);
   const [projectLoads, setProjectLoads] = useState<number>(0);
 
   const apiHandler = new ApiHandler("", "");
@@ -140,6 +141,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
         } else {
             const success = await apiHandler.updateDetails(token, projectName);
             if (success) {
+                setInstanciated(true);
                 updateData();
             } else {
                 setError(true);
@@ -162,6 +164,7 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             const success = await apiHandler.updateDetails(token, projectName);
             if (success) {
                 updateData();
+                setInstanciated(true)
                 setProjectLoads(0);
             } else {
                 setError(true);
@@ -182,7 +185,8 @@ const GitlabProvider = (props: {children?: ReactNode}) => {
             milestones: getMilestones(),
             error,
             loading,
-            update: updateOutside,
+            update,
+            instanciated,
             setFilter: setDateFilter
         }}>
             {props.children}

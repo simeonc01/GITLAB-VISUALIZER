@@ -224,6 +224,7 @@ export interface IContextDefault {
     milestones: Milestone[] | null;
     error: boolean;
     loading: boolean;
+    instanciated: boolean;
     update: () => void;
     setFilter: (startDate: Date | null, endDate: Date | null) => void;
 }
