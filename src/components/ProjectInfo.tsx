@@ -1,16 +1,11 @@
 import {
-  Box,
-  CircularProgress,
-  Divider,
-  Tooltip,
-  Typography,
+  CircularProgress
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { IContextDefault, Label, Milestone, Project } from "../util/types";
 import { GitLabContext } from "./GitlabProvider";
 import Container from "./LayoutContainer";
 import ProjectInfoContent from "./ProjectInfoContent";
-
 
 const ProjectInfo = () => {
   const context = useContext<IContextDefault>(GitLabContext);

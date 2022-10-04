@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { GitLabContext } from "./GitlabProvider";
 import Container from "./LayoutContainer";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 function IssuesComponent() {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -281,80 +281,98 @@ function IssuesComponent() {
     },
   ];
 
-  return (
-    <Container>
-      <Typography variant="h5">Active issues</Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            width: ["300px", "400px", "600px"],
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <ResponsiveContainer width="100%" height={250}>
-            <AreaChart data={graphData}>
-              <defs>
-                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#154734" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="date" />
-              <YAxis padding={{ top: 10 }} />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip />
-              <Area
-                type="monotone"
-                dataKey="issues"
-                stroke="#8884d8"
-                fillOpacity={1}
-                fill="url(#colorUv)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </Box>
+  if (!context.loading)
+    return (
+      <Container>
+        <Typography variant="h5">Active issues</Typography>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            flexDirection: "row",
             justifyContent: "center",
-            ml: 1,
-            fontSize: {
-              xs: "12",
-              sm: "14px",
-              md: "20px",
-            },
+            alignItems: "center",
           }}
         >
           <Box
             sx={{
-              display: {
-                xs: "none",
-                sm: "block",
+              width: ["300px", "400px", "600px"],
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={graphData}>
+                <defs>
+                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#154734" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#154734" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="date" />
+                <YAxis padding={{ top: 10 }} />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="issues"
+                  stroke="#8884d8"
+                  fillOpacity={1}
+                  fill="url(#colorUv)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              ml: 1,
+              fontSize: {
+                xs: "12",
+                sm: "14px",
+                md: "20px",
               },
             }}
           >
-            <Typography variant="h6" fontSize="inherit">
-              Total issues: {myData.length}
-            </Typography>
-            <Typography variant="h6" fontSize="inherit">
-              Total closed issues: {countAllClosed()}
-            </Typography>
-            <Typography variant="h6" fontSize="inherit">
-              The last issue was created by: {lastAuthor()}
-            </Typography>
+            <Box
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "block",
+                },
+              }}
+            >
+              <Typography variant="h6" fontSize="inherit">
+                Total issues: {myData.length}
+              </Typography>
+              <Typography variant="h6" fontSize="inherit">
+                Total closed issues: {countAllClosed()}
+              </Typography>
+              <Typography variant="h6" fontSize="inherit">
+                The last issue was created by: {lastAuthor()}
+              </Typography>
+            </Box>
           </Box>
         </Box>
+      </Container>
+    );
+
+  return (
+    <Container>
+      <Typography variant="h5">Commits</Typography>
+      <Box
+        sx={{
+          width: ["300px", "400px", "600px"],
+          height: "250px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
       </Box>
     </Container>
   );
