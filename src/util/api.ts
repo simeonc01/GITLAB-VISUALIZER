@@ -179,9 +179,6 @@ export class ApiHandler {
     }
 
     
-
-
-
     public async getIssues(): Promise<Issue[]> {
         if (this.id < 0)
             return Promise.reject<Issue[]>({
@@ -212,13 +209,6 @@ export class ApiHandler {
                     data: null
                 });
             }
-
-        /*
-        return wrapPromise<Issue[]>(
-            this.handler.get(`/projects/${this.id}/issues?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        ); */
     }
 
     public async getBranches(): Promise<Branch[]> {
@@ -228,11 +218,27 @@ export class ApiHandler {
                 data: null
             });
         
-        return wrapPromise<Branch[]>(
-            this.handler.get(`/projects/${this.id}/repository/branches?per_page=100`, {
-                validateStatus: (code: number) => code === 200
-            })
-        );
+            try {
+                const data = await wrapPromiseHeaderIncluded<Branch[]>(
+                    this.handler.get<Branch[]>(`/projects/${this.id}/repository/branches?per_page=100`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                );
+        
+                if (parseInt(data.headers["x-total-pages"]) > 1) {
+                    for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                        const d = await wrapPromise(this.handler.get(`/projects/${this.id}/repository/brances?per_page=100&page=${i}`))
+                        data.data.push(...d);
+                    }
+                }
+        
+                return Promise.resolve<Branch[]>(data.data);
+            } catch (e) {
+                return Promise.reject<Branch[]>({
+                    message: e, 
+                    data: null
+                });
+            }
     }
 
     public async getEvents(): Promise<Event[]> {
