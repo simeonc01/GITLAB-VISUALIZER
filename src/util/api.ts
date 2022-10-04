@@ -188,12 +188,37 @@ export class ApiHandler {
                 message: "Project ID was not set", 
                 data: null
             });
+
+
+            try {
+                const data = await wrapPromiseHeaderIncluded<Issue[]>(
+                    this.handler.get<Issue[]>(`/projects/${this.id}/issues?per_page=100`, {
+                        validateStatus: (code: number) => code === 200
+                    })
+                );
         
+                if (parseInt(data.headers["x-total-pages"]) > 1) {
+                    for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                        const d = await wrapPromise(this.handler.get(`/projects/${this.id}/issues?per_page=100&page=${i}`))
+                        data.data.push(...d);
+                        console.log(d.length);
+                    }
+                }
+        
+                return Promise.resolve<Issue[]>(data.data);
+            } catch (e) {
+                return Promise.reject<Issue[]>({
+                    message: e, 
+                    data: null
+                });
+            }
+
+        /*
         return wrapPromise<Issue[]>(
             this.handler.get(`/projects/${this.id}/issues?per_page=100`, {
                 validateStatus: (code: number) => code === 200
             })
-        );
+        ); */
     }
 
     public async getBranches(): Promise<Branch[]> {
@@ -223,11 +248,12 @@ export class ApiHandler {
                     validateStatus: (code: number) => code === 200
                 })
             );
-    
-            for (let i = 1; i <= parseInt(data.headers["x-total-pages"]); i++) {
-                const d = await wrapPromise(this.handler.get(`/projects/${this.id}/events?per_page=100&page=${i}`))
-                data.data.push(...d);
-                console.log(d.length);
+            if (parseInt(data.headers["x-total-pages"]) > 1) {
+                for (let i = 2; i <= parseInt(data.headers["x-total-pages"]); i++) {
+                    const d = await wrapPromise(this.handler.get(`/projects/${this.id}/events?per_page=100&page=${i}`))
+                    data.data.push(...d);
+                    console.log(d.length);
+                }
             }
     
             return Promise.resolve<Event[]>(data.data);
