@@ -1,5 +1,5 @@
 # Prosjekt 2 - IT2810 Webutvikling
-Prosjektet skal visualisere GitLab data. For å gjøre dette benytter vi oss av GitLab sitt eget api. Webapplikasjonen er skrevet ved hjelp av React i TypeScript.
+Prosjektet skal visualisere GitLab data. For å gjøre dette benytter vi oss av GitLab sitt eget api. Webapplikasjonen er skrevet ved hjelp av React i TypeScript. For å starte prosjektet klikker du øverst til høyre. I URL-feltet skrives URL'en fra hjemsiden til prosjektet ditt. "https://gitlab.stud.idi.ntnu.no/it2810-h22/Team-<ditt team nummer>/<ditt prosjekt navn>". I Token id skrives Access Token som du finner under settingsmenyen i ditt prosjekt.
 
 ## MUI bibliotek
 I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig MUI. Årsaken til at vi valgte nettopp dette biblioteket er at det innehar rikelige UI-komponenter som kan benyttes i react-applikasjonen vår. I tillegg har vi en oppfatning av at MUI blir mye brukt ute i utviklerbransjen, slik at det kan være nyttig for oss å bli kjent med dette biblioteket allerede her. Underveis har vi også tatt i bruke egne React-komponenter i prosjektet.
