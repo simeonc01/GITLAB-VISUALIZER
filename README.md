@@ -1,5 +1,5 @@
 # Prosjekt 2 - IT2810 Webutvikling
-Prosjektet skal visualisere GitLab data. For å gjøre dette benytter vi oss av GitLab sitt eget api.
+Prosjektet skal visualisere GitLab data. For å gjøre dette benytter vi oss av GitLab sitt eget api. Webapplikasjonen er skrevet ved hjelp av React i TypeScript.
 
 Kommandoer:
 ### `npm start`
@@ -19,9 +19,7 @@ I dette prosjektet har vi valgt å benytte oss av et eksternt bibliotek, nemlig 
 
 
 ## Bruk av context
-Hvordan har vi valgt å løse dette??
-
-
+Vi har benyttet oss av React sitt Context API. Vi har wrappet hele applikasjonen i dette slik at alle komponenter kan benytte seg av det. Vi valgte å bruke Context'en til å holde på all dataen som vi henter fra gitLab API'et. Dette syntes vi var hensiktsmessig siden da kan informasjonen brukes på tvers av komponentene med minimalt antall kall til API'et.
 
 ## Testing
 Hva er gjort og hvorfor? 
