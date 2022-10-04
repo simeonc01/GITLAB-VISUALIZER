@@ -31,9 +31,6 @@ function wrapPromiseHeaderIncluded<T>(axios: AxiosPromise<T>) {
     })
 }
 
-
-
-
 export class ApiHandler {
     private readonly handler: AxiosInstance;
     private id = -1;
@@ -49,12 +46,13 @@ export class ApiHandler {
         this.token = token;
         this.handler = axios.create({
             baseURL: `https://gitlab.stud.idi.ntnu.no/api/v4`,
-            timeout: 3000
+            timeout: 100000
         });
         this.handler.defaults.headers.common["PRIVATE-TOKEN"] = token;
     }
 
     public async update(): Promise<UpdateData> {
+        console.log("update called");
         return new Promise<UpdateData>((resolve, reject) => {
             Promise.all([
                 this.getCommits(),
