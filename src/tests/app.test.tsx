@@ -5,5 +5,3 @@ describe('Jest set up', () => {
       expect(true).toBeTruthy();
     });
   });
-
-

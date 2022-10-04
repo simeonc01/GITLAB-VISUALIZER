@@ -215,7 +215,7 @@ export type Label = {
 
 // other types
 export interface IContextDefault {
-    commits: Commit[] | null;
+    commits: BetterCommit[] | null;
     branches: Branch[] | null;
     issues: Issue[] | null;
     labels: Label[] | null;
@@ -244,4 +244,8 @@ export type GitlabError = {
 export type LineType = {
     dataKey: string;
     stroke?: string;
+}
+
+export interface BetterCommit extends Commit {
+    created_at_date: Date
 }
